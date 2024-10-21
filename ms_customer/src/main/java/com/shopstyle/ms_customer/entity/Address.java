@@ -38,7 +38,8 @@ public class Address implements Serializable {
     @Column(name = "complement", nullable = true)
     private String complement;
 
-//    @Column(name = "customer", nullable = false)
-//    private Customer customer;
+    @OneToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
+    private Customer customer;
 
 }
