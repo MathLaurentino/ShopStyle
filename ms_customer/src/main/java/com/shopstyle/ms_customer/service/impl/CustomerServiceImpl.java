@@ -1,6 +1,8 @@
 package com.shopstyle.ms_customer.service.impl;
 
 import com.shopstyle.ms_customer.entity.Customer;
+import com.shopstyle.ms_customer.exception.CpfAlreadyInUseException;
+import com.shopstyle.ms_customer.exception.EmailAlreadyInUseException;
 import com.shopstyle.ms_customer.repository.CustomerRepository;
 import com.shopstyle.ms_customer.service.CustomerService;
 import com.shopstyle.ms_customer.web.dto.CustomerGetDto;
@@ -21,11 +23,11 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = CustomerMapper.toCustomer(dto);
 
         repository.findByCpf(customer.getCpf()).ifPresent(s -> {
-            throw new RuntimeException("Cpf already in use");
+            throw new CpfAlreadyInUseException("Cpf already in use");
         });
 
         repository.findByEmail(customer.getEmail()).ifPresent(s -> {
-            throw new RuntimeException("Email already in use");
+            throw new EmailAlreadyInUseException("Email already in use");
         });
 
         return CustomerMapper.toDto(repository.save(customer));
