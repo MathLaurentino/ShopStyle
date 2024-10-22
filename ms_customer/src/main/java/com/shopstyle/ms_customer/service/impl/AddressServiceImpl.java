@@ -45,9 +45,11 @@ public class AddressServiceImpl implements AddressService {
         return AddressMapper.toDto(addressRepository.save(address));
     }
 
-    //TODO
     @Override
     public void deleteAddress(Long id) {
+        var address = addressRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Address not found"));
 
+        addressRepository.deleteById(address.getId());
     }
 }

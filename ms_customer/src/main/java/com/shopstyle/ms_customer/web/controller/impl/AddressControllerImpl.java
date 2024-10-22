@@ -37,8 +37,9 @@ public class AddressControllerImpl implements AddressController {
 
     @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAddress(@RequestParam Long id) {
-        return null;
+    public ResponseEntity<Void> deleteAddress(@PathVariable Long id) {
+        service.deleteAddress(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
