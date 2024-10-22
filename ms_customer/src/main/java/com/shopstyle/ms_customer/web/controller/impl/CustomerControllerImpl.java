@@ -34,10 +34,11 @@ public class CustomerControllerImpl implements CustomerController {
         return ResponseEntity.ok(customerGetDto);
     }
 
-    //TODO
     @Override
-    public ResponseEntity<CustomerGetDto> updateCustomer(Long id, CustomerPutDto dto) {
-        return null;
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerGetDto> updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerPutDto dto) {
+        var customerGetDto = service.updateCustomer(id, dto);
+        return ResponseEntity.ok(customerGetDto);
     }
 
     //TODO
