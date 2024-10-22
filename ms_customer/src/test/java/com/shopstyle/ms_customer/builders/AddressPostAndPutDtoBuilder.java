@@ -1,10 +1,10 @@
 package com.shopstyle.ms_customer.builders;
 
-import com.shopstyle.ms_customer.web.dto.AddressPostAndPutDto;
+import com.shopstyle.ms_customer.web.dto.AddressPostDto;
 
 public class AddressPostAndPutDtoBuilder {
 
-    private AddressPostAndPutDto addressDto;
+    private AddressPostDto addressDto;
 
     public AddressPostAndPutDtoBuilder() {
     }
@@ -12,7 +12,7 @@ public class AddressPostAndPutDtoBuilder {
     public static AddressPostAndPutDtoBuilder anAddressPostAndPutDto() {
         AddressPostAndPutDtoBuilder builder = new AddressPostAndPutDtoBuilder();
 
-        builder.addressDto = new AddressPostAndPutDto();
+        builder.addressDto = new AddressPostDto();
         builder.addressDto.setState("São Paulo");
         builder.addressDto.setCity("São Paulo");
         builder.addressDto.setDistrict("Centro");
@@ -64,7 +64,7 @@ public class AddressPostAndPutDtoBuilder {
         return this;
     }
 
-    public AddressPostAndPutDto get() {
+    public AddressPostDto get() {
         return this.addressDto;
     }
 }
