@@ -24,6 +24,9 @@ public class Category implements Serializable {
     @Column(name = "active", nullable = false)
     private boolean active;
 
+    @OneToMany(mappedBy="category")
+    private Set<Product> products;
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Category parentCategory;

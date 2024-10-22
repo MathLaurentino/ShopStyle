@@ -3,13 +3,15 @@ package com.shopstyle.ms_catalog.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @Entity
-public class Product {
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +31,9 @@ public class Product {
 
     @Column(name = "active", nullable = false)
     private boolean active;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Category category;
 
 }
