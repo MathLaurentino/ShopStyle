@@ -3,6 +3,7 @@ package com.shopstyle.ms_customer.service.impl;
 import com.shopstyle.ms_customer.entity.Customer;
 import com.shopstyle.ms_customer.exception.CpfAlreadyInUseException;
 import com.shopstyle.ms_customer.exception.EmailAlreadyInUseException;
+import com.shopstyle.ms_customer.exception.EntityNotFoundException;
 import com.shopstyle.ms_customer.repository.CustomerRepository;
 import com.shopstyle.ms_customer.service.CustomerService;
 import com.shopstyle.ms_customer.web.dto.CustomerGetDto;
@@ -11,6 +12,7 @@ import com.shopstyle.ms_customer.web.dto.CustomerPutDto;
 import com.shopstyle.ms_customer.web.dto.mapper.CustomerMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -33,10 +35,13 @@ public class CustomerServiceImpl implements CustomerService {
         return CustomerMapper.toDto(repository.save(customer));
     }
 
-    //TODO
+
     @Override
+    @Transactional(readOnly = true)
     public CustomerGetDto getCustomerById(Long id) {
-        return null;
+        var customer = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Customer not found"));
+        return CustomerMapper.toDto(customer);
     }
 
     //TODO
