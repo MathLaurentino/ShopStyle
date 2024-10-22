@@ -1,0 +1,41 @@
+package com.shopstyle.ms_customer.web.controller.impl;
+
+import com.shopstyle.ms_customer.service.AddressService;
+import com.shopstyle.ms_customer.web.controller.AddressController;
+import com.shopstyle.ms_customer.web.dto.AddressGetDto;
+import com.shopstyle.ms_customer.web.dto.AddressPostAndPutDto;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RequiredArgsConstructor
+@RequestMapping("v1/address")
+@RestController
+public class AddressControllerImpl implements AddressController {
+
+    private final AddressService service;
+
+    @Override
+    @PostMapping
+    public ResponseEntity<AddressGetDto> createAddress(@Valid @RequestBody AddressPostAndPutDto dto) {
+        var AddressGetDto = service.createAddress(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(AddressGetDto);
+    }
+
+    @Override
+    @PutMapping("/{id}")
+    public ResponseEntity<AddressGetDto> updateAddress(@RequestParam Long id, @Valid @RequestBody AddressPostAndPutDto dto) {
+        return null;
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAddress(@RequestParam Long id) {
+        return null;
+    }
+
+}

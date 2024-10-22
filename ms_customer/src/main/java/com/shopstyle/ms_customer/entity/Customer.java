@@ -1,17 +1,20 @@
 package com.shopstyle.ms_customer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shopstyle.ms_customer.entity.enums.Sex;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
+@ToString
 @Entity
 public class Customer implements Serializable {
 
@@ -43,5 +46,8 @@ public class Customer implements Serializable {
 
     @Column(name = "active", nullable = false)
     private boolean active;
+
+    @OneToMany(mappedBy="customer")
+    private Set<Address> addresses;
 
 }
