@@ -2,6 +2,7 @@ package com.shopstyle.ms_customer.service.impl;
 
 import com.shopstyle.ms_customer.exception.CpfAlreadyInUseException;
 import com.shopstyle.ms_customer.exception.EmailAlreadyInUseException;
+import com.shopstyle.ms_customer.exception.EntityNotFoundException;
 import com.shopstyle.ms_customer.repository.CustomerRepository;
 import com.shopstyle.ms_customer.web.dto.CustomerGetDto;
 import org.junit.jupiter.api.Test;
@@ -65,6 +66,27 @@ public class CustomerServiceImplTest {
         assertThrows(EmailAlreadyInUseException.class, () -> customerService.createCustomer(postDto));
 
         verify(repository, times(1)).findByCpf(postDto.getCpf());
+    }
+
+    @Test
+    void getCustomer_Success() {
+        var customer = aCustomer().withId(1L).get();
+        when(repository.findById(customer.getId())).thenReturn(Optional.of(customer));
+
+        CustomerGetDto result = customerService.getCustomerById(customer.getId());
+
+        assertEquals(customer.getId(), result.getId());
+        verify(repository, times(1)).findById(customer.getId());
+    }
+
+    @Test
+    void getCustomer_ThrowEntityNotFoundException() {
+
+        when(repository.findById(any())).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> customerService.getCustomerById(any()));
+
+        verify(repository, times(1)).findById(any());
     }
 
 }
