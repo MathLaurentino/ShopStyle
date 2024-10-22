@@ -38,6 +38,11 @@ public class CustomerBuilder {
         return this;
     }
 
+    public CustomerBuilder withId(Long id) {
+        customer.setId(id);
+        return this;
+    }
+
     public Customer get() {
         return this.customer;
     }

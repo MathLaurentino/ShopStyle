@@ -8,11 +8,9 @@ import com.shopstyle.ms_customer.web.dto.CustomerPutDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,19 +24,21 @@ public class CustomerControllerImpl implements CustomerController {
     @PostMapping
     public ResponseEntity<CustomerGetDto> createCustomer(@Valid @RequestBody CustomerPostDto dto) {
         var customerGetDto = service.createCustomer(dto);
-        return ResponseEntity.status(201).body(customerGetDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerGetDto);
     }
 
-    //TODO
     @Override
-    public ResponseEntity<CustomerGetDto> getCustomerById(Long id) {
-        return null;
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerGetDto> getCustomerById(@PathVariable Long id) {
+        var customerGetDto = service.getCustomerById(id);
+        return ResponseEntity.ok(customerGetDto);
     }
 
-    //TODO
     @Override
-    public ResponseEntity<CustomerGetDto> updateCustomer(Long id, CustomerPutDto dto) {
-        return null;
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerGetDto> updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerPutDto dto) {
+        var customerGetDto = service.updateCustomer(id, dto);
+        return ResponseEntity.ok(customerGetDto);
     }
 
     //TODO

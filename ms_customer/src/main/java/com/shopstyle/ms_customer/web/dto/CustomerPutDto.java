@@ -1,10 +1,18 @@
 package com.shopstyle.ms_customer.web.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerPutDto {
 
     @NotBlank
@@ -29,6 +37,7 @@ public class CustomerPutDto {
     private String email;
 
     @NotBlank
-    private boolean active;
+    @Pattern(regexp = "true|false")
+    private String active;
 
 }

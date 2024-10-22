@@ -2,6 +2,7 @@ package com.shopstyle.ms_customer.web.exception;
 
 import com.shopstyle.ms_customer.exception.CpfAlreadyInUseException;
 import com.shopstyle.ms_customer.exception.EmailAlreadyInUseException;
+import com.shopstyle.ms_customer.exception.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -19,55 +20,63 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler({CpfAlreadyInUseException.class, EmailAlreadyInUseException.class})
-    public ResponseEntity<ErroMessage> uniqueViolationException(RuntimeException ex,
-                                                                HttpServletRequest request) {
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErroMessage(request, HttpStatus.CONFLICT, ex.getMessage()));
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErroMessage> methodArgumentNotValidException(MethodArgumentNotValidException ex,
-                                                                       HttpServletRequest request,
-                                                                       BindingResult result) {
-        return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErroMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Campo(s) invalido(s)", result));
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErroMessage> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex, HttpServletRequest request) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErroMessage(request, HttpStatus.BAD_REQUEST, ex.getMessage()));
-    }
-
-    @ExceptionHandler({NoResourceFoundException.class, ChangeSetPersister.NotFoundException.class})
-    public ResponseEntity<ErroMessage> handleHttpMessageNotReadableException(Exception ex, HttpServletRequest request) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorMessage> entidadeNaoEncontrada(RuntimeException ex, HttpServletRequest request) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErroMessage(request, HttpStatus.NOT_FOUND, ex.getMessage()));
+                .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, ex.getMessage()));
+    }
+
+    @ExceptionHandler({CpfAlreadyInUseException.class, EmailAlreadyInUseException.class})
+    public ResponseEntity<ErrorMessage> uniqueViolationException(RuntimeException ex,
+                                                                 HttpServletRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.CONFLICT, ex.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> methodArgumentNotValidException(MethodArgumentNotValidException ex,
+                                                                        HttpServletRequest request,
+                                                                        BindingResult result) {
+        return ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Campo(s) invalido(s)", result));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorMessage> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+
+    @ExceptionHandler({NoResourceFoundException.class, ChangeSetPersister.NotFoundException.class})
+    public ResponseEntity<ErrorMessage> handleHttpMessageNotReadableException(Exception ex, HttpServletRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, ex.getMessage()));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErroMessage> handleDataIntegrityViolationException(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorMessage> handleDataIntegrityViolationException(Exception ex, HttpServletRequest request) {
         String errorMessage = "Erro de integridade de dados. Por favor, verifique os dados fornecidos.";
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErroMessage(request, HttpStatus.BAD_REQUEST, errorMessage));
+                .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, errorMessage));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ErroMessage> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorMessage> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
         return ResponseEntity
                 .status(HttpStatus.METHOD_NOT_ALLOWED)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErroMessage(request, HttpStatus.METHOD_NOT_ALLOWED, "Método HTTP não suportado"));
+                .body(new ErrorMessage(request, HttpStatus.METHOD_NOT_ALLOWED, "Método HTTP não suportado"));
     }
 }
