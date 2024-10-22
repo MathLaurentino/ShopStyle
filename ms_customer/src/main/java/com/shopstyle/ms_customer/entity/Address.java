@@ -1,5 +1,6 @@
 package com.shopstyle.ms_customer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,8 +39,9 @@ public class Address implements Serializable {
     @Column(name = "complement", nullable = true)
     private String complement;
 
-    @OneToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
 }
