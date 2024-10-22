@@ -1,6 +1,7 @@
 package com.shopstyle.ms_customer.service.impl;
 
 import com.shopstyle.ms_customer.entity.Customer;
+import com.shopstyle.ms_customer.entity.enums.Sex;
 import com.shopstyle.ms_customer.exception.CpfAlreadyInUseException;
 import com.shopstyle.ms_customer.exception.EmailAlreadyInUseException;
 import com.shopstyle.ms_customer.exception.EntityNotFoundException;
@@ -44,16 +45,38 @@ public class CustomerServiceImpl implements CustomerService {
         return CustomerMapper.toDto(customer);
     }
 
-    //TODO
+
     @Override
     public CustomerGetDto updateCustomer(Long id, CustomerPutDto dto) {
-        return null;
+        var customer = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Customer not found"));
+
+        checkDuplicateCpfAndEmail(dto, customer.getId());
+
+        customer.setCpf(dto.getCpf());
+        customer.setFirstName(dto.getFirstName());
+        customer.setLastName(dto.getLastName());
+        customer.setSex(Sex.valueOf(dto.getSex()));
+        customer.setBirthdate(dto.getBirthdate());
+        customer.setEmail(dto.getEmail());
+        customer.setActive(dto.getActive().equals("true"));
+
+        return CustomerMapper.toDto(repository.save(customer));
     }
 
     //TODO
     @Override
     public void updatePassword(Long id, String password) {
 
+    }
+
+
+    private void checkDuplicateCpfAndEmail(CustomerPutDto dto, Long customerId) {
+        repository.findByCpf(dto.getCpf()).filter(existingCustomer -> !existingCustomer.getId().equals(customerId))
+                .ifPresent(s -> { throw new CpfAlreadyInUseException("Cpf already in use"); });
+
+        repository.findByEmail(dto.getEmail()).filter(existingCustomer -> !existingCustomer.getId().equals(customerId))
+                .ifPresent(s -> { throw new EmailAlreadyInUseException("Email already in use"); });
     }
 
 }
