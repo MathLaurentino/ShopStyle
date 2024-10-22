@@ -4,7 +4,9 @@ import com.shopstyle.ms_customer.service.AddressService;
 import com.shopstyle.ms_customer.web.controller.AddressController;
 import com.shopstyle.ms_customer.web.dto.AddressGetDto;
 import com.shopstyle.ms_customer.web.dto.AddressPostDto;
+import com.shopstyle.ms_customer.web.dto.AddressPutDto;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,8 +30,9 @@ public class AddressControllerImpl implements AddressController {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<AddressGetDto> updateAddress(@RequestParam Long id, @Valid @RequestBody AddressPostDto dto) {
-        return null;
+    public ResponseEntity<AddressGetDto> updateAddress(@PathVariable Long id, @Valid @RequestBody AddressPutDto dto) {
+        var addressDto = service.updateAddress(id, dto);
+        return ResponseEntity.status(HttpStatus.OK).body(addressDto);
     }
 
     @Override

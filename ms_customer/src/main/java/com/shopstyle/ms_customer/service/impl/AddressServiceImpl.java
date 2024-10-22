@@ -31,7 +31,18 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressGetDto updateAddress(Long id, AddressPutDto dto) {
-        return null;
+        var address = addressRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Address not found"));
+
+        address.setState(dto.getState());
+        address.setCity(dto.getCity());
+        address.setDistrict(dto.getDistrict());
+        address.setStreet(dto.getStreet());
+        address.setNumber(dto.getNumber());
+        address.setCep(dto.getCep());
+        address.setComplement(dto.getComplement());
+
+        return AddressMapper.toDto(addressRepository.save(address));
     }
 
     //TODO

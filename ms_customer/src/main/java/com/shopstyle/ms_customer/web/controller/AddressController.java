@@ -7,7 +7,7 @@ public interface AddressController {
 
     ResponseEntity<AddressGetDto> createAddress(AddressPostDto dto);
 
-    ResponseEntity<AddressGetDto> updateAddress(Long id, AddressPostDto dto);
+    ResponseEntity<AddressGetDto> updateAddress(Long id, AddressPutDto dto);
 
     ResponseEntity<Void> deleteAddress(Long id);
 
