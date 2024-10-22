@@ -37,6 +37,11 @@ public class CustomerGetBuilder {
         return this;
     }
 
+    public CustomerGetBuilder withId(Long id) {
+        customerDto.setId(id);
+        return this;
+    }
+
     public CustomerGetDto get() {
         return this.customerDto;
     }
