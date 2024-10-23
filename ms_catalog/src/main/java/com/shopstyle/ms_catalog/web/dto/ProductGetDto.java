@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,5 +19,5 @@ public class ProductGetDto {
     private String brand;
     private String material;
     private Boolean active;
-
+    private List<SkuGetDto> skus;
 }
