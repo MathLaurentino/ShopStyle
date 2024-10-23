@@ -30,8 +30,10 @@ public class CategoryControllerImpl implements CategoryController {
     }
 
     @Override
-    public ResponseEntity<CategoryGetDto> updateCategory(@Valid @RequestBody CategoryReqDto dto) {
-        return null;
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryTreeDto> updateCategory(@Valid @RequestBody CategoryReqDto dto, @PathVariable Long id) {
+        var treeDto = service.updateCategory(dto, id);
+        return ResponseEntity.ok(treeDto);
     }
 
     @Override

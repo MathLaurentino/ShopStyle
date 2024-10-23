@@ -11,7 +11,7 @@ public interface CategoryController {
 
     ResponseEntity<CategoryGetDto> createCategory (CategoryReqDto dto);
 
-    ResponseEntity<CategoryGetDto> updateCategory (CategoryReqDto dto);
+    ResponseEntity<CategoryTreeDto> updateCategory (CategoryReqDto dto, Long id);
 
     ResponseEntity<List<CategoryTreeDto>> getAllCategoriesAsTree();
 

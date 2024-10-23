@@ -36,8 +36,19 @@ public class CategoryServiceImpl implements CategoryService {
 
     // TODO
     @Override
-    public CategoryGetDto updateCategory(CategoryReqDto dto) {
-        return null;
+    public CategoryTreeDto updateCategory(CategoryReqDto dto, Long id) {
+        var category = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Category not found"));
+
+        if (dto.getParentCategory() != null) {
+            var parentCategory = repository.findById(dto.getParentCategory()).orElseThrow(
+                    () -> new EntityNotFoundException("Category not found"));
+            category.setParentCategory(parentCategory);
+        }
+        category.setName(dto.getName());
+        category.setActive(dto.getActive().equals("true"));
+
+        return CategoryMapper.toTreeDto(repository.save(category));
     }
 
     @Override

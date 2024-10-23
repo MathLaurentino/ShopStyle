@@ -10,7 +10,7 @@ public interface CategoryService {
 
     CategoryGetDto createCategory (CategoryReqDto dto);
 
-    CategoryGetDto updateCategory (CategoryReqDto dto);
+    CategoryTreeDto updateCategory (CategoryReqDto dto, Long id);
 
     List<CategoryTreeDto> getAllCategoriesAsTree();
 
