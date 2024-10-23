@@ -1,18 +1,18 @@
 package com.shopstyle.ms_customer.builders;
 
-import com.shopstyle.ms_customer.web.dto.AddressPostAndPutDto;
+import com.shopstyle.ms_customer.web.dto.AddressPostDto;
 
-public class AddressPostAndPutDtoBuilder {
+public class AddressPostDtoBuilder {
 
-    private AddressPostAndPutDto addressDto;
+    private AddressPostDto addressDto;
 
-    public AddressPostAndPutDtoBuilder() {
+    public AddressPostDtoBuilder() {
     }
 
-    public static AddressPostAndPutDtoBuilder anAddressPostAndPutDto() {
-        AddressPostAndPutDtoBuilder builder = new AddressPostAndPutDtoBuilder();
+    public static AddressPostDtoBuilder anAddressPostDto() {
+        AddressPostDtoBuilder builder = new AddressPostDtoBuilder();
 
-        builder.addressDto = new AddressPostAndPutDto();
+        builder.addressDto = new AddressPostDto();
         builder.addressDto.setState("São Paulo");
         builder.addressDto.setCity("São Paulo");
         builder.addressDto.setDistrict("Centro");
@@ -24,47 +24,47 @@ public class AddressPostAndPutDtoBuilder {
         return builder;
     }
 
-    public AddressPostAndPutDtoBuilder withState(String state) {
+    public AddressPostDtoBuilder withState(String state) {
         addressDto.setState(state);
         return this;
     }
 
-    public AddressPostAndPutDtoBuilder withCity(String city) {
+    public AddressPostDtoBuilder withCity(String city) {
         addressDto.setCity(city);
         return this;
     }
 
-    public AddressPostAndPutDtoBuilder withDistrict(String district) {
+    public AddressPostDtoBuilder withDistrict(String district) {
         addressDto.setDistrict(district);
         return this;
     }
 
-    public AddressPostAndPutDtoBuilder withStreet(String street) {
+    public AddressPostDtoBuilder withStreet(String street) {
         addressDto.setStreet(street);
         return this;
     }
 
-    public AddressPostAndPutDtoBuilder withNumber(String number) {
+    public AddressPostDtoBuilder withNumber(String number) {
         addressDto.setNumber(number);
         return this;
     }
 
-    public AddressPostAndPutDtoBuilder withCep(String cep) {
+    public AddressPostDtoBuilder withCep(String cep) {
         addressDto.setCep(cep);
         return this;
     }
 
-    public AddressPostAndPutDtoBuilder withComplement(String complement) {
+    public AddressPostDtoBuilder withComplement(String complement) {
         addressDto.setComplement(complement);
         return this;
     }
 
-    public AddressPostAndPutDtoBuilder withCustomer(Long customerId) {
+    public AddressPostDtoBuilder withCustomer(Long customerId) {
         addressDto.setCustomer(customerId);
         return this;
     }
 
-    public AddressPostAndPutDto get() {
+    public AddressPostDto get() {
         return this.addressDto;
     }
 }

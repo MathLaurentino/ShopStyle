@@ -4,9 +4,9 @@ import com.shopstyle.ms_customer.web.dto.*;
 
 public interface AddressService {
 
-    AddressGetDto createAddress(AddressPostAndPutDto dto);
+    AddressGetDto createAddress(AddressPostDto dto);
 
-    AddressGetDto updateAddress(Long id, AddressPostAndPutDto dto);
+    AddressGetDto updateAddress(Long id, AddressPutDto dto);
 
     void deleteAddress(Long id);
 

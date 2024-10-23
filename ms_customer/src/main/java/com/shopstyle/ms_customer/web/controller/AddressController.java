@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity;
 
 public interface AddressController {
 
-    ResponseEntity<AddressGetDto> createAddress(AddressPostAndPutDto dto);
+    ResponseEntity<AddressGetDto> createAddress(AddressPostDto dto);
 
-    ResponseEntity<AddressGetDto> updateAddress(Long id, AddressPostAndPutDto dto);
+    ResponseEntity<AddressGetDto> updateAddress(Long id, AddressPutDto dto);
 
     ResponseEntity<Void> deleteAddress(Long id);
 
