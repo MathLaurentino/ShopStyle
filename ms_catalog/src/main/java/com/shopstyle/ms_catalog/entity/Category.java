@@ -22,7 +22,7 @@ public class Category implements Serializable {
     private String name;
 
     @Column(name = "active", nullable = false)
-    private boolean active;
+    private Boolean active;
 
     @OneToMany(mappedBy="category")
     private Set<Product> products;
