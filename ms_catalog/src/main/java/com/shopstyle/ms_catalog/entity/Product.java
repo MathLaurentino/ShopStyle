@@ -34,10 +34,10 @@ public class Product implements Serializable {
     private boolean active;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @OneToMany(mappedBy="product")
-    private Set<Sku> products;
+    private Set<Sku> skus;
 
 }
