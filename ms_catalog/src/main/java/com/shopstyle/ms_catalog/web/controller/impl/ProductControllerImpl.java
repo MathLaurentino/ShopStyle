@@ -42,11 +42,11 @@ public class ProductControllerImpl implements ProductController {
         return null;
     }
 
-    //TODO
     @Override
     @PutMapping("/{id}")
     public ResponseEntity<ProductGetDto> updateProduct(@Valid @RequestBody ProductReqDto dto, @PathVariable Long id) {
-        return null;
+        var getDto = service.updateProduct(dto, id);
+        return ResponseEntity.ok(getDto);
     }
 
     @Override

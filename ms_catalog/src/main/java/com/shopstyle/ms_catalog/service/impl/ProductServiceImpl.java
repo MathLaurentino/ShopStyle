@@ -53,7 +53,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductGetDto updateProduct(ProductReqDto dto, Long id) {
-        return null;
+        Category category = categoryRepository.findById(dto.getCategory()).orElseThrow(
+                () -> new EntityNotFoundException("Category not found"));
+
+        if (!category.getSubcategories().isEmpty()) {
+            throw new CategoryHasChildrenException("Product cannot be added to category '" + category.getName() +
+                    "' because it has subcategories.");
+        }
+
+        Product product = productRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Product not found"));
+
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setBrand(dto.getBrand());
+        product.setMaterial(dto.getMaterial());
+        product.setActive(dto.getActive().equals("true"));
+        product.setCategory(category);
+
+        return ProductMapper.toDto(productRepository.save(product));
     }
 
     @Override
