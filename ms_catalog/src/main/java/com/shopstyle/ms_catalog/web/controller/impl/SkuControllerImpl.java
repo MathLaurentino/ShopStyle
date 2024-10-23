@@ -33,10 +33,11 @@ public class SkuControllerImpl implements SkuController {
         return null;
     }
 
-    //TODO
     @Override
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSku(@PathVariable Long id) {
-        return null;
+        service.deleteSku(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

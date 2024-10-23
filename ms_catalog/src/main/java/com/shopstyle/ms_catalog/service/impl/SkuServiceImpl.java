@@ -37,10 +37,12 @@ public class SkuServiceImpl implements SkuService {
         return null;
     }
 
-    //TODO
     @Override
     public void deleteSku(Long id) {
+        skuRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Sku not found"));
 
+        skuRepository.deleteById(id);
     }
 
 }
