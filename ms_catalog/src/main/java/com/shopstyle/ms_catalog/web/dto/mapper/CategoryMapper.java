@@ -17,11 +17,13 @@ public class CategoryMapper {
         dto.setName(category.getName());
         dto.setActive(category.getActive());
 
-        List<CategoryTreeDto> subcategoryDtos = category.getSubcategories().stream()
-            .map(CategoryMapper::toTreeDto)
-            .collect(Collectors.toList());
-        
-        dto.setSubcategories(subcategoryDtos);
+        if (!category.getSubcategories().isEmpty()) {
+            List<CategoryTreeDto> subcategoryDtos = category.getSubcategories().stream()
+                    .map(CategoryMapper::toTreeDto)
+                    .collect(Collectors.toList());
+            dto.setChildren(subcategoryDtos);
+        }
+
         return dto;
     }
 

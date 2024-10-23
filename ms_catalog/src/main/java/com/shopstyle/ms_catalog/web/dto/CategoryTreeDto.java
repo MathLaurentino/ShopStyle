@@ -10,5 +10,5 @@ public class CategoryTreeDto {
     private Long id;
     private String name;
     private boolean active;
-    private List<CategoryTreeDto> subcategories; // Recursivamente mantém a lista de subcategorias
+    private List<CategoryTreeDto> children;
 }
