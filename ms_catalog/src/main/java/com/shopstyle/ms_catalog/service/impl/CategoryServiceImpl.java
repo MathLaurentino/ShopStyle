@@ -1,5 +1,6 @@
 package com.shopstyle.ms_catalog.service.impl;
 
+import com.shopstyle.ms_catalog.exception.EntityNotFoundException;
 import com.shopstyle.ms_catalog.repository.CategoryRepository;
 import com.shopstyle.ms_catalog.service.CategoryService;
 import com.shopstyle.ms_catalog.web.dto.CategoryGetDto;
@@ -23,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (dto.getParentCategory() != null) {
             var parentCategory = repository.findById(dto.getParentCategory()).orElseThrow(
-                    () -> new RuntimeException("Category not found"));
+                    () -> new EntityNotFoundException("Category not found"));
             category.setParentCategory(parentCategory);
         }
 
