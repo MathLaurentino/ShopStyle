@@ -14,6 +14,6 @@ public interface CategoryService {
 
     List<CategoryTreeDto> getAllCategoriesAsTree();
 
-    Void deleteCategoryById(Long id);
+    void deleteCategoryById(Long id);
 
 }

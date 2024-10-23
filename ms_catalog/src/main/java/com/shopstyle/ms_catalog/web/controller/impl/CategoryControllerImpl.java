@@ -42,8 +42,10 @@ public class CategoryControllerImpl implements CategoryController {
     }
 
     @Override
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoryById(@PathVariable Long id) {
-        return null;
+        service.deleteCategoryById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

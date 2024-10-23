@@ -1,6 +1,7 @@
 package com.shopstyle.ms_catalog.service.impl;
 
 import com.shopstyle.ms_catalog.entity.Category;
+import com.shopstyle.ms_catalog.exception.CategoryHasChildrenException;
 import com.shopstyle.ms_catalog.exception.EntityNotFoundException;
 import com.shopstyle.ms_catalog.repository.CategoryRepository;
 import com.shopstyle.ms_catalog.service.CategoryService;
@@ -48,10 +49,21 @@ public class CategoryServiceImpl implements CategoryService {
                 .collect(Collectors.toList());
     }
 
-    // TODO
     @Override
-    public Void deleteCategoryById(Long id) {
-        return null;
+    public void deleteCategoryById(Long id) {
+        Category category = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Category not found"));
+
+        if (!category.getSubcategories().isEmpty()) {
+            String subcategoryNames = category.getSubcategories().stream()
+                    .map(Category::getName)
+                    .collect(Collectors.joining(", "));
+
+            throw new CategoryHasChildrenException("Category has subcategories: " + subcategoryNames +
+                    ". You need to delete them first.");
+        }
+
+        repository.deleteById(id);
     }
 
 }
