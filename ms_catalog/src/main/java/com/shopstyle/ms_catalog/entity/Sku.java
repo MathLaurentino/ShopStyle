@@ -36,8 +36,8 @@ public class Sku implements Serializable {
     @Column(name = "width", nullable = false)
     private Float width;
 
-//    @ManyToOne
-//    @JoinColumn(name = "product_id", nullable = false)
-//    private Product product;
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
 }

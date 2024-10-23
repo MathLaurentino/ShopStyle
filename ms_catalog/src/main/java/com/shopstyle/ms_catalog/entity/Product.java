@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,5 +36,8 @@ public class Product implements Serializable {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy="product")
+    private Set<Sku> products;
 
 }
