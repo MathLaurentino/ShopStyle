@@ -25,7 +25,6 @@ public class ProductReqDto {
     @NotBlank
     private String brand;
 
-    @NotBlank
     private String material;
 
     @NotBlank
