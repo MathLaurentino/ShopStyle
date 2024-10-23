@@ -35,8 +35,10 @@ public class CategoryControllerImpl implements CategoryController {
     }
 
     @Override
+    @GetMapping
     public ResponseEntity<List<CategoryTreeDto>> getAllCategoriesAsTree() {
-        return null;
+        var dto = service.getAllCategoriesAsTree();
+        return ResponseEntity.ok(dto);
     }
 
     @Override

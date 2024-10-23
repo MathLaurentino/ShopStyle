@@ -1,5 +1,6 @@
 package com.shopstyle.ms_catalog.service.impl;
 
+import com.shopstyle.ms_catalog.entity.Category;
 import com.shopstyle.ms_catalog.exception.EntityNotFoundException;
 import com.shopstyle.ms_catalog.repository.CategoryRepository;
 import com.shopstyle.ms_catalog.service.CategoryService;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -37,10 +39,13 @@ public class CategoryServiceImpl implements CategoryService {
         return null;
     }
 
-    // TODO
     @Override
     public List<CategoryTreeDto> getAllCategoriesAsTree() {
-        return List.of();
+        List<Category> rootCategories = repository.findByParentCategoryIsNull();
+
+        return rootCategories.stream()
+                .map(CategoryMapper::toTreeDto)
+                .collect(Collectors.toList());
     }
 
     // TODO
