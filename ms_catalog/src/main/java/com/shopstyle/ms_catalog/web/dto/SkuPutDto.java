@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,6 +41,6 @@ public class SkuPutDto {
     private Float width;
 
     @NotBlank
-    private Set<@NotBlank String> images;
+    private List<@NotBlank String> images;
 
 }

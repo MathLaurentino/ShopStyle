@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,7 +41,7 @@ public class Sku implements Serializable {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @OneToMany(mappedBy="sku")
-    private Set<Media> medias;
+    @OneToMany(mappedBy="sku", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Media> medias;
 
 }
