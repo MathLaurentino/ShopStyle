@@ -32,7 +32,8 @@ public class ProductControllerImpl implements ProductController {
     @Override
     @GetMapping("/{id}")
     public ResponseEntity<ProductGetDto> getProduct(@PathVariable Long id) {
-        return null;
+        var getDto = service.getProduct(id);
+        return ResponseEntity.ok(getDto);
     }
 
     //TODO

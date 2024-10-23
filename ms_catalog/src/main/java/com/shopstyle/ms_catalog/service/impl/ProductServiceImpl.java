@@ -1,6 +1,7 @@
 package com.shopstyle.ms_catalog.service.impl;
 
 import com.shopstyle.ms_catalog.entity.Category;
+import com.shopstyle.ms_catalog.entity.Product;
 import com.shopstyle.ms_catalog.exception.CategoryHasChildrenException;
 import com.shopstyle.ms_catalog.exception.EntityNotFoundException;
 import com.shopstyle.ms_catalog.repository.CategoryRepository;
@@ -39,7 +40,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductGetDto getProduct(Long id) {
-        return null;
+        Product product = productRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Product not found"));
+
+        return ProductMapper.toDto(product);
     }
 
     @Override
