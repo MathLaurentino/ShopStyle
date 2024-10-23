@@ -8,7 +8,7 @@ public interface SkuService {
 
     SkuGetDto createSku(SkuPostDto dto);
 
-    SkuGetDto updateSku(SkuPutDto dto);
+    SkuGetDto updateSku(SkuPutDto dto, Long id);
 
     void deleteSku(Long id);
 

@@ -9,7 +9,7 @@ public interface SkuController {
 
     ResponseEntity<SkuGetDto> createSku(SkuPostDto dto);
 
-    ResponseEntity<SkuGetDto> updateSku(SkuPutDto dto);
+    ResponseEntity<SkuGetDto> updateSku(SkuPutDto dto, Long id);
 
     ResponseEntity<Void> deleteSku(Long id);
 

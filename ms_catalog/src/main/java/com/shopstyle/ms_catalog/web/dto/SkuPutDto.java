@@ -40,7 +40,7 @@ public class SkuPutDto {
     @Positive
     private Float width;
 
-    @NotBlank
+    @NotNull
     private List<@NotBlank String> images;
 
 }

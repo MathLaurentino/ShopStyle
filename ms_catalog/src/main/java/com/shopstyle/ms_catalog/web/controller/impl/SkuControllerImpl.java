@@ -27,10 +27,11 @@ public class SkuControllerImpl implements SkuController {
         return ResponseEntity.status(HttpStatus.CREATED).body(getDto);
     }
 
-    //TODO
     @Override
-    public ResponseEntity<SkuGetDto> updateSku(@Valid @RequestBody SkuPutDto dto) {
-        return null;
+    @PutMapping("/{id}")
+    public ResponseEntity<SkuGetDto> updateSku(@Valid @RequestBody SkuPutDto dto, @PathVariable Long id) {
+        var getDto = service.updateSku(dto, id);
+        return ResponseEntity.ok(getDto);
     }
 
     @Override
