@@ -35,11 +35,11 @@ public class ProductControllerImpl implements ProductController {
         return ResponseEntity.ok(getDto);
     }
 
-    //TODO
     @Override
     @GetMapping
     public ResponseEntity<List<ProductGetDto>> getAllProduct() {
-        return null;
+        var products = service.getAllProduct();
+        return ResponseEntity.ok(products);
     }
 
     @Override

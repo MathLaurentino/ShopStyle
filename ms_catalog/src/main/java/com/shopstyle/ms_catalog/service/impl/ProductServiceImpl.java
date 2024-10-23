@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -48,7 +49,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductGetDto> getAllProduct() {
-        return List.of();
+        List<Product> products = productRepository.findAll();
+
+        return products.stream()
+                .map(ProductMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
