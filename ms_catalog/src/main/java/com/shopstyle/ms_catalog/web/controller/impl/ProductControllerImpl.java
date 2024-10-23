@@ -28,7 +28,6 @@ public class ProductControllerImpl implements ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(getDto);
     }
 
-    //TODO
     @Override
     @GetMapping("/{id}")
     public ResponseEntity<ProductGetDto> getProduct(@PathVariable Long id) {
@@ -50,11 +49,11 @@ public class ProductControllerImpl implements ProductController {
         return null;
     }
 
-    //TODO
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        return null;
+        service.deleteProduct(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
