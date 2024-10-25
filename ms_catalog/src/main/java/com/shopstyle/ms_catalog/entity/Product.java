@@ -1,5 +1,6 @@
 package com.shopstyle.ms_catalog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,13 +28,14 @@ public class Product implements Serializable {
     @Column(name = "brand", nullable = false)
     private String brand;
 
-    @Column(name = "material", nullable = false)
+    @Column(name = "material", nullable = true)
     private String material;
 
     @Column(name = "active", nullable = false)
-    private boolean active;
+    private Boolean active;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
