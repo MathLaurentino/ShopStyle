@@ -5,19 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductGetDto {
+public class MediaGetDto {
 
     private Long id;
-    private String name;
-    private String description;
-    private String brand;
-    private String material;
-    private Boolean active;
-    private List<SkuGetDto> skus;
+    private String imageUrl;
+
 }

@@ -1,6 +1,7 @@
 package com.shopstyle.ms_catalog.web.exception;
 
 import com.shopstyle.ms_catalog.exception.CategoryHasChildrenException;
+import com.shopstyle.ms_catalog.exception.CategoryIsInactive;
 import com.shopstyle.ms_catalog.exception.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,7 +21,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class ApiExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorMessage> entidadeNaoEncontrada(RuntimeException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorMessage> entityNotFound(RuntimeException ex, HttpServletRequest request) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -33,6 +34,14 @@ public class ApiExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+
+    @ExceptionHandler(CategoryIsInactive.class)
+    public ResponseEntity<ErrorMessage> categoryIsInactive(RuntimeException ex, HttpServletRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.CONFLICT, ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

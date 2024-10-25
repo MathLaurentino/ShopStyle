@@ -3,6 +3,7 @@ package com.shopstyle.ms_catalog.service.impl;
 import com.shopstyle.ms_catalog.entity.Category;
 import com.shopstyle.ms_catalog.entity.Product;
 import com.shopstyle.ms_catalog.exception.CategoryHasChildrenException;
+import com.shopstyle.ms_catalog.exception.CategoryIsInactive;
 import com.shopstyle.ms_catalog.exception.EntityNotFoundException;
 import com.shopstyle.ms_catalog.repository.CategoryRepository;
 import com.shopstyle.ms_catalog.repository.ProductRepository;
@@ -31,6 +32,11 @@ public class ProductServiceImpl implements ProductService {
         if (!category.getSubcategories().isEmpty()) {
             throw new CategoryHasChildrenException("Product cannot be added to category '" + category.getName() +
                     "' because it has subcategories.");
+        }
+
+        if (!category.getActive()) {
+            throw new CategoryIsInactive("Product cannot be added to category '" + category.getName() +
+                    "' because it is inactive");
         }
 
         var product = ProductMapper.toProduct(dto);

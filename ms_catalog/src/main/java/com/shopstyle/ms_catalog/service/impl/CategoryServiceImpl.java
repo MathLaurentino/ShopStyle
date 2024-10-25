@@ -34,7 +34,6 @@ public class CategoryServiceImpl implements CategoryService {
         return CategoryMapper.toDto(repository.save(category));
     }
 
-    // TODO
     @Override
     public CategoryTreeDto updateCategory(CategoryReqDto dto, Long id) {
         var category = repository.findById(id).orElseThrow(
