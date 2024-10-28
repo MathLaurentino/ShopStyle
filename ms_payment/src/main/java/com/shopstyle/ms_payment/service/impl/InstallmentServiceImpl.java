@@ -65,10 +65,12 @@ public class InstallmentServiceImpl implements InstallmentService {
         return InstallmentMapper.toDto(installmentRepository.save(installment));
     }
 
-    //TODO
     @Override
     public void deleteInstallment(Long id) {
+        installmentRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Installment not found"));
 
+        installmentRepository.deleteById(id);
     }
 
 }

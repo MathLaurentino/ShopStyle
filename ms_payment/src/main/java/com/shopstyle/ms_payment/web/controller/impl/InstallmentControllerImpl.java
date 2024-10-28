@@ -36,7 +36,8 @@ public class InstallmentControllerImpl implements InstallmentController {
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteInstallment(@PathVariable Long id) {
-        return null;
+        service.deleteInstallment(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
