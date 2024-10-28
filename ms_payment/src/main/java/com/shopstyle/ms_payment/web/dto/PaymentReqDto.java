@@ -2,6 +2,7 @@ package com.shopstyle.ms_payment.web.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,9 @@ public class PaymentReqDto {
     @NotBlank
     private String type;
 
-    @NotNull
-    private Boolean installment;
+    @NotBlank
+    @Pattern(regexp = "true|false")
+    private String installments;
 
     @NotNull
     private Boolean active;
