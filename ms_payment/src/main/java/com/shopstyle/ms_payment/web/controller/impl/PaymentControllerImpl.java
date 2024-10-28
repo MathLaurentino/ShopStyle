@@ -28,10 +28,11 @@ public class PaymentControllerImpl implements PaymentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(getDto);
     }
 
-    // TODO
     @Override
+    @PutMapping("/{id}")
     public ResponseEntity<PaymentGetDto> updatePayment(@Valid @RequestBody PaymentReqDto dto, @PathVariable Long id) {
-        return null;
+        var getDto = service.updatePayment(dto, id);
+        return ResponseEntity.ok(getDto);
     }
 
     // TODO

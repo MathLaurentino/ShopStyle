@@ -1,6 +1,7 @@
 package com.shopstyle.ms_payment.service.impl;
 
 import com.shopstyle.ms_payment.entity.Payment;
+import com.shopstyle.ms_payment.exception.EntityNotFoundException;
 import com.shopstyle.ms_payment.repository.PaymentRepository;
 import com.shopstyle.ms_payment.service.PaymentService;
 import com.shopstyle.ms_payment.web.dto.PaymentGetDto;
@@ -24,10 +25,16 @@ public class PaymentServiceImpl implements PaymentService {
         return PaymentMapper.toDto(repository.save(payment));
     }
 
-    // TODO
     @Override
     public PaymentGetDto updatePayment(PaymentReqDto dto, Long id) {
-        return null;
+        Payment payment = repository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Payment not found"));
+
+        payment.setType(dto.getType());
+        payment.setInstallments(dto.getInstallments().equals("true"));
+        payment.setActive(dto.getActive().equals("true"));
+
+        return PaymentMapper.toDto(repository.save(payment));
     }
 
     // TODO
