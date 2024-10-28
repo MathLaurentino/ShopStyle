@@ -1,5 +1,6 @@
 package com.shopstyle.ms_payment.web.dto;
 
+import com.shopstyle.ms_payment.entity.Installment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,6 @@ public class PaymentGetDto {
     private String type;
     private Boolean installments;
     private Boolean active;
+    private Installment installment;
 
 }
