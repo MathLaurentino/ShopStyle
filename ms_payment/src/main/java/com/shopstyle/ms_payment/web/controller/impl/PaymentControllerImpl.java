@@ -42,10 +42,11 @@ public class PaymentControllerImpl implements PaymentController {
         return ResponseEntity.ok(payments);
     }
 
-    // TODO
     @Override
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
-        return null;
+        service.deletePayment(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

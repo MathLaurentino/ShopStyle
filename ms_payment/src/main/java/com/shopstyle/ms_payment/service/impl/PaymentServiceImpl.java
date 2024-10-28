@@ -45,9 +45,11 @@ public class PaymentServiceImpl implements PaymentService {
         return payments.stream().map(PaymentMapper::toDto).collect(Collectors.toList());
     }
 
-    // TODO
     @Override
     public void deletePayment(Long id) {
+        repository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Payment not found"));
 
+        repository.deleteById(id);
     }
 }
