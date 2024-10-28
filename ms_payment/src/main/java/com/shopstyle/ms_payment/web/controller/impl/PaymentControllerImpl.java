@@ -35,10 +35,11 @@ public class PaymentControllerImpl implements PaymentController {
         return ResponseEntity.ok(getDto);
     }
 
-    // TODO
     @Override
+    @GetMapping
     public ResponseEntity<List<PaymentGetDto>> getPayment() {
-        return null;
+        var payments = service.getPayment();
+        return ResponseEntity.ok(payments);
     }
 
     // TODO

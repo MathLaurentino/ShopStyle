@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -37,10 +38,11 @@ public class PaymentServiceImpl implements PaymentService {
         return PaymentMapper.toDto(repository.save(payment));
     }
 
-    // TODO
     @Override
     public List<PaymentGetDto> getPayment() {
-        return List.of();
+        List<Payment> payments = repository.findAll();
+
+        return payments.stream().map(PaymentMapper::toDto).collect(Collectors.toList());
     }
 
     // TODO
