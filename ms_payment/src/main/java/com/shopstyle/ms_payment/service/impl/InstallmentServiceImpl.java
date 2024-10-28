@@ -54,7 +54,7 @@ public class InstallmentServiceImpl implements InstallmentService {
             throw new InstallmentNotAcceptedException("Installments not accepted for this payment method");
         }
 
-        if (payment.getInstallment().getId() != null && !Objects.equals(payment.getInstallment().getId(), id)) {
+        if (payment.getInstallment() != null && !Objects.equals(payment.getInstallment().getId(), id)) {
             throw  new PaymentAlreadyHaveAnInstallmentException("Payment already have an installment");
         }
 

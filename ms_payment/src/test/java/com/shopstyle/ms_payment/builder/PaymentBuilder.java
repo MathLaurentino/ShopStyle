@@ -1,5 +1,6 @@
 package com.shopstyle.ms_payment.builder;
 
+import com.shopstyle.ms_payment.entity.Installment;
 import com.shopstyle.ms_payment.entity.Payment;
 
 public class PaymentBuilder {
@@ -29,6 +30,12 @@ public class PaymentBuilder {
 
     public PaymentBuilder withInstallments(Boolean installments) {
         payment.setInstallments(installments);
+        return this;
+    }
+
+
+    public PaymentBuilder withInstallment(Installment installment) {
+        payment.setInstallment(installment);
         return this;
     }
 
