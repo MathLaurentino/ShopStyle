@@ -1,6 +1,8 @@
 package com.shopstyle.ms_payment.web.exception;
 
 import com.shopstyle.ms_payment.exception.EntityNotFoundException;
+import com.shopstyle.ms_payment.exception.InstallmentNotAcceptedException;
+import com.shopstyle.ms_payment.exception.PaymentAlreadyHaveAnInstallmentException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -24,6 +26,14 @@ public class ApiExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, ex.getMessage()));
+    }
+
+    @ExceptionHandler({InstallmentNotAcceptedException.class, PaymentAlreadyHaveAnInstallmentException.class})
+    public ResponseEntity<ErrorMessage> conflictExceptions(RuntimeException ex, HttpServletRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.CONFLICT, ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
