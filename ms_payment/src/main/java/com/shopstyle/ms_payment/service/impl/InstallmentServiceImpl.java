@@ -14,6 +14,8 @@ import com.shopstyle.ms_payment.web.dto.mapper.InstallmentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @RequiredArgsConstructor
 @Service
 public class InstallmentServiceImpl implements InstallmentService {
@@ -40,10 +42,27 @@ public class InstallmentServiceImpl implements InstallmentService {
         return InstallmentMapper.toDto(installmentRepository.save(installment));
     }
 
-    //TODO
     @Override
     public InstallmentGetDto updateInstallment(InstallmentReqDto dto, Long id) {
-        return null;
+        Installment installment = installmentRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Installment not found"));
+
+        Payment payment = paymentRepository.findById(dto.getPaymentId()).orElseThrow(() ->
+                new EntityNotFoundException("Payment not found"));
+
+        if (!payment.getInstallments()) {
+            throw new InstallmentNotAcceptedException("Installments not accepted for this payment method");
+        }
+
+        if (payment.getInstallment().getId() != null && !Objects.equals(payment.getInstallment().getId(), id)) {
+            throw  new PaymentAlreadyHaveAnInstallmentException("Payment already have an installment");
+        }
+
+        installment.setAmount(dto.getAmount());
+        installment.setBrand(dto.getBrand());
+        installment.setPayment(payment);
+
+        return InstallmentMapper.toDto(installmentRepository.save(installment));
     }
 
     //TODO

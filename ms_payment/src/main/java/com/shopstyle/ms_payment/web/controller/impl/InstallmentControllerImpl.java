@@ -29,7 +29,8 @@ public class InstallmentControllerImpl implements InstallmentController {
     @Override
     @PutMapping("/{id}")
     public ResponseEntity<InstallmentGetDto> updateInstallment(@Valid @RequestBody InstallmentReqDto dto, @PathVariable Long id) {
-        return null;
+        var getDto = service.updateInstallment(dto, id);
+        return ResponseEntity.ok(getDto);
     }
 
     @Override
