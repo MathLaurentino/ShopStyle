@@ -10,6 +10,8 @@ public interface SkuService {
 
     SkuGetDto updateSku(SkuPutDto dto, Long id);
 
+    SkuGetDto getSkuById(Long id);
+
     void deleteSku(Long id);
 
 }

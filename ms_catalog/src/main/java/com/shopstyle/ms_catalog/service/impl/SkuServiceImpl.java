@@ -63,6 +63,14 @@ public class SkuServiceImpl implements SkuService {
     }
 
     @Override
+    public SkuGetDto getSkuById(Long id) {
+        Sku sku = skuRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Sku not found"));
+
+        return SkuMapper.toDto(sku);
+    }
+
+    @Override
     public void deleteSku(Long id) {
         skuRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Sku not found"));
