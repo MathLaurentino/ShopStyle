@@ -1,9 +1,6 @@
 package com.shopstyle.ms_order.web.exception;
 
-import com.shopstyle.ms_order.exception.CustomerInactiveException;
-import com.shopstyle.ms_order.exception.EntityNotFoundException;
-import com.shopstyle.ms_order.exception.ErrorMicroServiceComunicationException;
-import com.shopstyle.ms_order.exception.InvalidAddressException;
+import com.shopstyle.ms_order.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -37,8 +34,8 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.FORBIDDEN, ex.getMessage()));
     }
 
-    @ExceptionHandler(InvalidAddressException.class)
-    public ResponseEntity<ErrorMessage> invalidAddressException(RuntimeException ex, HttpServletRequest request) {
+    @ExceptionHandler({InvalidAddressException.class, InsufficientStockException.class})
+    public ResponseEntity<ErrorMessage> badRequestException(RuntimeException ex, HttpServletRequest request) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
