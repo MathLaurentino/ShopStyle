@@ -19,7 +19,7 @@ public class Sku implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
     @Column(name = "quantity", nullable = false)
