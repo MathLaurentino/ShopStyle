@@ -1,8 +1,8 @@
 package com.shopstyle.ms_order.servece.impl;
 
 import com.shopstyle.ms_order.entity.Order;
-import com.shopstyle.ms_order.entity.Payment;
 import com.shopstyle.ms_order.entity.enums.OrderStatus;
+import com.shopstyle.ms_order.exception.EntityNotFoundException;
 import com.shopstyle.ms_order.repository.OrderRepository;
 import com.shopstyle.ms_order.servece.CustomerService;
 import com.shopstyle.ms_order.servece.OrderPaymentService;
@@ -11,6 +11,7 @@ import com.shopstyle.ms_order.servece.SkuService;
 import com.shopstyle.ms_order.web.dto.OrderGetDto;
 import com.shopstyle.ms_order.web.dto.OrderReqDto;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentMessage;
+import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentStatusMessage;
 import com.shopstyle.ms_order.web.dto.kafka.PaymentDto;
 import com.shopstyle.ms_order.web.dto.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,16 @@ public class OrderServiceImpl implements OrderService {
         orderPaymentService.sendOrderPaymentMessage(message);
 
         return OrderMapper.toDto(createdOrder);
+    }
+
+    @Override
+    public void updateOrderStatus(OrderPaymentStatusMessage message) {
+        Order order = repository.findById(message.getOrderId()).orElseThrow(() ->
+                new EntityNotFoundException("Order not found"));
+
+        order.setStatus(OrderStatus.valueOf(message.getStatus()));
+
+        repository.save(order);
     }
 
 }

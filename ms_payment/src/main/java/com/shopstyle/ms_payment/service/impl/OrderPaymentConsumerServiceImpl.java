@@ -19,6 +19,7 @@ public class OrderPaymentConsumerServiceImpl implements OrderPaymentConsumerServ
     private final OrderPaymentProducerServiceImpl orderPaymentPublisherService;
     private final PaymentRepository paymentRepository;
 
+    @Override
     @KafkaListener(topics = "order-payments", groupId = "payment-group", containerFactory = "jsonContainerFactory")
     public void consumeOrderPaymentMessage(OrderPaymentMessage message) {
 

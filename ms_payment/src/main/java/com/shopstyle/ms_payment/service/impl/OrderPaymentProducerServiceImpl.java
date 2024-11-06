@@ -12,6 +12,7 @@ public class OrderPaymentProducerServiceImpl implements OrderPaymentProducerServ
 
     private final KafkaTemplate<String, PaymentResponseMessage> kafkaTemplate;
 
+    @Override
     public void sendPaymentStatus(PaymentResponseMessage response) {
         kafkaTemplate.send("payment-status", response);
     }
