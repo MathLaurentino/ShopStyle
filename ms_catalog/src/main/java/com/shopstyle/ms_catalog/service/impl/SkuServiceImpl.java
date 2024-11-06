@@ -10,6 +10,7 @@ import com.shopstyle.ms_catalog.service.SkuService;
 import com.shopstyle.ms_catalog.web.dto.SkuGetDto;
 import com.shopstyle.ms_catalog.web.dto.SkuPostDto;
 import com.shopstyle.ms_catalog.web.dto.SkuPutDto;
+import com.shopstyle.ms_catalog.web.dto.kafka.SkuDto;
 import com.shopstyle.ms_catalog.web.dto.mapper.SkuMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,16 @@ public class SkuServiceImpl implements SkuService {
                 () -> new EntityNotFoundException("Sku not found"));
 
         return SkuMapper.toDto(sku);
+    }
+
+    @Override
+    public void decreaseSkuQuantity(List<SkuDto> skuDtos) {
+        for (SkuDto skuDto : skuDtos) {
+            var sku = skuRepository.findById(skuDto.getId()).orElseThrow(
+                    () -> new EntityNotFoundException("Sku not found"));
+            sku.setQuantity(sku.getQuantity() - skuDto.getQuantity());
+            skuRepository.save(sku);
+        }
     }
 
     @Override
