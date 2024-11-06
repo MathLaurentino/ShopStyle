@@ -4,16 +4,15 @@ import com.shopstyle.ms_order.entity.Order;
 import com.shopstyle.ms_order.entity.enums.OrderStatus;
 import com.shopstyle.ms_order.exception.EntityNotFoundException;
 import com.shopstyle.ms_order.repository.OrderRepository;
-import com.shopstyle.ms_order.servece.CustomerService;
-import com.shopstyle.ms_order.servece.OrderPaymentService;
-import com.shopstyle.ms_order.servece.OrderService;
-import com.shopstyle.ms_order.servece.SkuService;
+import com.shopstyle.ms_order.servece.*;
 import com.shopstyle.ms_order.web.dto.OrderGetDto;
 import com.shopstyle.ms_order.web.dto.OrderReqDto;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentMessage;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentStatusMessage;
 import com.shopstyle.ms_order.web.dto.kafka.PaymentDto;
+import com.shopstyle.ms_order.web.dto.kafka.SkusMessage;
 import com.shopstyle.ms_order.web.dto.mapper.OrderMapper;
+import com.shopstyle.ms_order.web.dto.kafka.SkuMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +25,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository repository;
     private final CustomerService customerService;
     private final SkuService skuService;
-    private final OrderPaymentService orderPaymentService;
+    private final OrderPaymentProducerService orderPaymentService;
+    private final CatalogSkusProducerService catalogSkusProducerService;
 
     @Override
     public OrderGetDto createOrder(OrderReqDto dto) {
@@ -55,8 +55,12 @@ public class OrderServiceImpl implements OrderService {
                 new EntityNotFoundException("Order not found"));
 
         order.setStatus(OrderStatus.valueOf(message.getStatus()));
-
         repository.save(order);
+
+        if (order.getStatus() == OrderStatus.PAYMENT_SUCCESSFUL) {
+            SkusMessage skusMessage = SkuMapper.toSkusMessage(order);
+            catalogSkusProducerService.sendSkusMessage(skusMessage);
+        }
     }
 
 }

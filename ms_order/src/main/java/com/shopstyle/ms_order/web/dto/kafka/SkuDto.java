@@ -11,7 +11,9 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderPaymentMessage implements Serializable {
-    private String orderId;
-    private PaymentDto payment;
+public class SkuDto implements Serializable {
+
+    private Long id;
+    private Integer quantity;
+
 }

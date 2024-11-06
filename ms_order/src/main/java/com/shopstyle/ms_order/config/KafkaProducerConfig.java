@@ -1,6 +1,7 @@
 package com.shopstyle.ms_order.config;
 
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentMessage;
+import com.shopstyle.ms_order.web.dto.kafka.SkusMessage;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -15,17 +16,33 @@ import java.util.Map;
 
 @Configuration
 public class KafkaProducerConfig {
+
     @Bean
-    public KafkaTemplate<String, OrderPaymentMessage> kafkaTemplate(ProducerFactory<String, OrderPaymentMessage> producerFactory) {
-        return new KafkaTemplate<>(producerFactory);
+    public ProducerFactory<String, SkusMessage> skusMessageProducerFactory() {
+        Map<String, Object> configs = new HashMap<>();
+        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(configs);
     }
 
     @Bean
-    public ProducerFactory<String, OrderPaymentMessage> producerFactory() {
-        Map<String, Object> config = new HashMap<>();
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(config);
+    public KafkaTemplate<String, SkusMessage> skusMessageKafkaTemplate() {
+        return new KafkaTemplate<>(skusMessageProducerFactory());
+    }
+
+
+    @Bean
+    public ProducerFactory<String, OrderPaymentMessage> orderPaymentMessageProducerFactory() {
+        Map<String, Object> configs = new HashMap<>();
+        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(configs);
+    }
+
+    @Bean
+    public KafkaTemplate<String, OrderPaymentMessage> orderPaymentMessageKafkaTemplate() {
+        return new KafkaTemplate<>(orderPaymentMessageProducerFactory());
     }
 }

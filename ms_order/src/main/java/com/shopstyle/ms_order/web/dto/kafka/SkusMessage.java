@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderPaymentMessage implements Serializable {
+public class SkusMessage implements Serializable {
+
     private String orderId;
-    private PaymentDto payment;
+    private List<SkuDto> skus;
 }
