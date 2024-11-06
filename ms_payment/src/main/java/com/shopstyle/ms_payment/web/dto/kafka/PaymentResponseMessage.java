@@ -1,4 +1,4 @@
-package com.shopstyle.ms_order.web.dto.kafka;
+package com.shopstyle.ms_payment.web.dto.kafka;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderPaymentMessage {
+public class PaymentResponseMessage {
     private String orderId;
-    private PaymentDto payment;
+    private String status;
 }

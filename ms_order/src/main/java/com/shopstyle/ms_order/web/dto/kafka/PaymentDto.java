@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderPaymentMessage {
-    private String orderId;
-    private PaymentDto payment;
+public class PaymentDto {
+    private Long id;
+    private Integer installments;
 }

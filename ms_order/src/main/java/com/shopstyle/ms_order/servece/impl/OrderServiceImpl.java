@@ -11,6 +11,7 @@ import com.shopstyle.ms_order.servece.SkuService;
 import com.shopstyle.ms_order.web.dto.OrderGetDto;
 import com.shopstyle.ms_order.web.dto.OrderReqDto;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentMessage;
+import com.shopstyle.ms_order.web.dto.kafka.PaymentDto;
 import com.shopstyle.ms_order.web.dto.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
 
         OrderPaymentMessage message = new OrderPaymentMessage();
         message.setOrderId(createdOrder.getId());
-        message.setPayment(new Payment(dto.getPayment().getId(), dto.getPayment().getInstallments()));
+        message.setPayment(new PaymentDto(dto.getPayment().getId(), dto.getPayment().getInstallments()));
         orderPaymentService.sendOrderPaymentMessage(message);
 
         return OrderMapper.toDto(createdOrder);

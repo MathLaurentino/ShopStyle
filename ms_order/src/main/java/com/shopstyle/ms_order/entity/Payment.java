@@ -16,6 +16,6 @@ public class Payment {
     private Long id;
 
     @Field("installments")
-    private int installments;
+    private Integer installments;
 
 }

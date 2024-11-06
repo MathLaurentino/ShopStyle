@@ -1,4 +1,4 @@
-package com.shopstyle.ms_order.web.dto.kafka;
+package com.shopstyle.ms_payment.web.dto.kafka;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
