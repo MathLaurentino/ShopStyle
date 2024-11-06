@@ -24,11 +24,13 @@ public class ProductMapper {
         getDto.setMaterial(product.getMaterial());
         getDto.setActive(product.getActive());
 
-        List<SkuGetDto> skuGetDtoList =  product.getSkus().stream()
-                .map(SkuMapper::toDto)
-                .collect(Collectors.toList());
+        if (product.getSkus() != null) {
+            List<SkuGetDto> skuGetDtoList =  product.getSkus().stream()
+                    .map(SkuMapper::toDto)
+                    .collect(Collectors.toList());
+            getDto.setSkus(skuGetDtoList);
+        }
 
-        getDto.setSkus(skuGetDtoList);
         return getDto;
     }
 

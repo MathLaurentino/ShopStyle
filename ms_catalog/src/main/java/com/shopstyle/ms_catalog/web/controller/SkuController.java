@@ -11,6 +11,8 @@ public interface SkuController {
 
     ResponseEntity<SkuGetDto> updateSku(SkuPutDto dto, Long id);
 
+    ResponseEntity<SkuGetDto> getSkuById(Long id);
+
     ResponseEntity<Void> deleteSku(Long id);
 
 }

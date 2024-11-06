@@ -35,6 +35,13 @@ public class SkuControllerImpl implements SkuController {
     }
 
     @Override
+    @GetMapping("/{id}")
+    public ResponseEntity<SkuGetDto> getSkuById(@PathVariable Long id) {
+        var getDto = service.getSkuById(id);
+        return ResponseEntity.ok(getDto);
+    }
+
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSku(@PathVariable Long id) {
         service.deleteSku(id);
