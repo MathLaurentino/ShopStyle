@@ -3,8 +3,7 @@ package com.shopstyle.ms_order.servece.impl;
 import com.shopstyle.ms_order.exception.EntityNotFoundException;
 import com.shopstyle.ms_order.exception.ErrorMicroServiceComunicationException;
 import com.shopstyle.ms_order.exception.InsufficientStockException;
-import com.shopstyle.ms_order.servece.CustomerFeignService;
-import com.shopstyle.ms_order.servece.SkuFeignService;
+import com.shopstyle.ms_order.feign.SkuFeignService;
 import com.shopstyle.ms_order.servece.SkuService;
 import com.shopstyle.ms_order.web.dto.CartItemDto;
 import com.shopstyle.ms_order.web.dto.feign.SkuDtoFeign;
@@ -21,7 +20,6 @@ import java.util.List;
 @Service
 public class SkuServiceImpl implements SkuService {
 
-    private final CustomerFeignService customerFeignService;
     private final SkuFeignService skuFeignService;
 
     @Override

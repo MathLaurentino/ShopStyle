@@ -1,6 +1,6 @@
-package com.shopstyle.ms_order.servece.impl;
+package com.shopstyle.ms_order.kafka.impl;
 
-import com.shopstyle.ms_order.servece.CatalogSkusProducerService;
+import com.shopstyle.ms_order.kafka.CatalogSkusProducerService;
 import com.shopstyle.ms_order.web.dto.kafka.SkusMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

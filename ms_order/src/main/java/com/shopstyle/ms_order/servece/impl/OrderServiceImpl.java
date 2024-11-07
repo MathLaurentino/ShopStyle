@@ -3,20 +3,24 @@ package com.shopstyle.ms_order.servece.impl;
 import com.shopstyle.ms_order.entity.Order;
 import com.shopstyle.ms_order.entity.enums.OrderStatus;
 import com.shopstyle.ms_order.exception.EntityNotFoundException;
+import com.shopstyle.ms_order.kafka.CatalogSkusProducerService;
+import com.shopstyle.ms_order.kafka.OrderPaymentProducerService;
 import com.shopstyle.ms_order.repository.OrderRepository;
 import com.shopstyle.ms_order.servece.*;
-import com.shopstyle.ms_order.web.dto.OrderGetDto;
-import com.shopstyle.ms_order.web.dto.OrderReqDto;
+import com.shopstyle.ms_order.web.dto.*;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentMessage;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentStatusMessage;
 import com.shopstyle.ms_order.web.dto.kafka.PaymentDto;
 import com.shopstyle.ms_order.web.dto.kafka.SkusMessage;
+import com.shopstyle.ms_order.web.dto.mapper.OrderGetMapper;
 import com.shopstyle.ms_order.web.dto.mapper.OrderMapper;
 import com.shopstyle.ms_order.web.dto.kafka.SkuMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -29,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
     private final CatalogSkusProducerService catalogSkusProducerService;
 
     @Override
-    public OrderGetDto createOrder(OrderReqDto dto) {
+    public CreatedOrderDto createOrder(OrderReqDto dto) {
         Order order = OrderMapper.toOrder(dto);
 
         customerService.customerDataIsValid(dto);
@@ -47,6 +51,75 @@ public class OrderServiceImpl implements OrderService {
         orderPaymentService.sendOrderPaymentMessage(message);
 
         return OrderMapper.toDto(createdOrder);
+    }
+
+    @Override
+    public List<OrderGetDto> getOrders(GetOrderQueryParam queryParams) {
+        LocalDateTime startDate = queryParams.getStartDate();
+        LocalDateTime endDate = queryParams.getEndDate() != null ? queryParams.getEndDate() : LocalDateTime.now();
+
+        List<Order> orderList;
+        if (queryParams.getStatus() == null) {
+            orderList = repository.findByDateBetween(startDate, endDate);
+        } else {
+            OrderStatus status = OrderStatus.valueOf(queryParams.getStatus());
+            orderList = repository.findByDateBetweenAndStatus(startDate, endDate, status);
+        }
+
+        return orderList.stream().map(OrderGetMapper::toOrderGetDto).collect(Collectors.toList());
+    }
+
+
+    public List<OrderGetDto> getOrdersByCustomerId2(GetOrderByCustomerIdQueryParam queryParams, Long customerId) {
+        LocalDateTime startDate = queryParams.getStartDate();
+        LocalDateTime endDate = queryParams.getEndDate();
+        OrderStatus orderStatus = queryParams.getStatus() != null ? OrderStatus.valueOf(queryParams.getStatus()) : null;
+
+        List<Order> orderList;
+        if (startDate == null && endDate == null && orderStatus == null) {
+            orderList = repository.findByCustomerId(customerId);
+        }
+        else if (startDate == null && endDate == null && orderStatus != null) {
+            orderList = repository.findByCustomerIdAndStatus(customerId, orderStatus);
+        }
+        else if (startDate != null || endDate != null) {
+            endDate = endDate == null ? LocalDateTime.now() : endDate;
+            startDate = startDate == null ? LocalDateTime.MIN : startDate;
+
+            orderList = (orderStatus == null)
+                    ? repository.findByCustomerIdAndDateBetween(customerId, startDate, endDate)
+                    : repository.findByCustomerIdAndDateBetweenAndStatus(customerId, startDate, endDate, orderStatus);
+        }
+        else {
+            orderList = repository.findByCustomerIdAndDateBetweenAndStatus(customerId, startDate, endDate, orderStatus);
+        }
+
+        return orderList.stream().map(OrderGetMapper::toOrderGetDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderGetDto> getOrdersByCustomerId(GetOrderByCustomerIdQueryParam queryParams, Long customerId) {
+        LocalDateTime startDate = queryParams.getStartDate();
+        LocalDateTime endDate = queryParams.getEndDate();
+        OrderStatus orderStatus = queryParams.getStatus() != null ? OrderStatus.valueOf(queryParams.getStatus()) : null;
+
+        List<Order> orderList;
+        if (startDate != null || endDate != null) {
+            endDate = endDate == null ? LocalDateTime.now() : endDate;
+            startDate = startDate == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : startDate;
+
+            orderList = (orderStatus == null)
+                    ? repository.findByCustomerIdAndDateBetween(customerId, startDate, endDate)
+                    : repository.findByCustomerIdAndDateBetweenAndStatus(customerId, startDate, endDate, orderStatus);
+        }
+        else if (orderStatus != null) {
+            orderList = repository.findByCustomerIdAndStatus(customerId, orderStatus);
+        }
+        else {
+            orderList = repository.findByCustomerId(customerId);
+        }
+
+        return orderList.stream().map(OrderGetMapper::toOrderGetDto).collect(Collectors.toList());
     }
 
     @Override
