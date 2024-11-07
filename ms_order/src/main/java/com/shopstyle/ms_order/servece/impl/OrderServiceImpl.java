@@ -7,8 +7,7 @@ import com.shopstyle.ms_order.kafka.CatalogSkusProducerService;
 import com.shopstyle.ms_order.kafka.OrderPaymentProducerService;
 import com.shopstyle.ms_order.repository.OrderRepository;
 import com.shopstyle.ms_order.servece.*;
-import com.shopstyle.ms_order.web.dto.CreatedOrderDto;
-import com.shopstyle.ms_order.web.dto.OrderReqDto;
+import com.shopstyle.ms_order.web.dto.*;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentMessage;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentStatusMessage;
 import com.shopstyle.ms_order.web.dto.kafka.PaymentDto;
@@ -19,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -49,6 +49,16 @@ public class OrderServiceImpl implements OrderService {
         orderPaymentService.sendOrderPaymentMessage(message);
 
         return OrderMapper.toDto(createdOrder);
+    }
+
+    @Override
+    public List<OrderGetDto> getOrders(GetOrderQueryParam queryParams) {
+        return List.of();
+    }
+
+    @Override
+    public List<OrderGetDto> getOrdersByCustomerId(GetOrderByCustomerIdQueryParam queryParam, Long customerId) {
+        return List.of();
     }
 
     @Override
