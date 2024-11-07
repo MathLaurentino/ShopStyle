@@ -2,7 +2,7 @@ package com.shopstyle.ms_order.web.controller.impl;
 
 import com.shopstyle.ms_order.servece.OrderService;
 import com.shopstyle.ms_order.web.controller.OrderController;
-import com.shopstyle.ms_order.web.dto.OrderGetDto;
+import com.shopstyle.ms_order.web.dto.CreatedOrderDto;
 import com.shopstyle.ms_order.web.dto.OrderReqDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     @PostMapping
-    public ResponseEntity<OrderGetDto> createOrder(@Valid @RequestBody OrderReqDto dto) {
+    public ResponseEntity<CreatedOrderDto> createOrder(@Valid @RequestBody OrderReqDto dto) {
         var getDto = service.createOrder(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(getDto);
     }

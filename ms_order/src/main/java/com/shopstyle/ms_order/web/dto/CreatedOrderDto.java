@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderGetDto {
+public class CreatedOrderDto {
 
     private String id;
     private LocalDateTime date;

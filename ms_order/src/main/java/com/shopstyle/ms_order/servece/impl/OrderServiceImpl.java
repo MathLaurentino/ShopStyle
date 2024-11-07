@@ -7,7 +7,7 @@ import com.shopstyle.ms_order.kafka.CatalogSkusProducerService;
 import com.shopstyle.ms_order.kafka.OrderPaymentProducerService;
 import com.shopstyle.ms_order.repository.OrderRepository;
 import com.shopstyle.ms_order.servece.*;
-import com.shopstyle.ms_order.web.dto.OrderGetDto;
+import com.shopstyle.ms_order.web.dto.CreatedOrderDto;
 import com.shopstyle.ms_order.web.dto.OrderReqDto;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentMessage;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentStatusMessage;
@@ -31,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private final CatalogSkusProducerService catalogSkusProducerService;
 
     @Override
-    public OrderGetDto createOrder(OrderReqDto dto) {
+    public CreatedOrderDto createOrder(OrderReqDto dto) {
         Order order = OrderMapper.toOrder(dto);
 
         customerService.customerDataIsValid(dto);
