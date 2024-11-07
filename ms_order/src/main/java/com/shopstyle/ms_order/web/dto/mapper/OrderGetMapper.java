@@ -16,6 +16,11 @@ public class OrderGetMapper {
 
     public static OrderGetDto toOrderGetDto(Order order) {
         OrderGetDto orderGetDto = new OrderGetDto();
+        orderGetDto.setId(order.getId());
+        orderGetDto.setDate(order.getDate());
+        orderGetDto.setStatus(order.getStatus());
+        orderGetDto.setTotal(order.getTotal());
+
         orderGetDto.setCustomer(customerToCustomerDto(order.getCustomer()));
         orderGetDto.setPayment(paymentToPaymentDto(order.getPayment()));
         orderGetDto.setCart(order.getCart().stream().map(OrderGetMapper::cartItemToCartItemDto).collect(Collectors.toList()));

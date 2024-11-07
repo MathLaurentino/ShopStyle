@@ -12,6 +12,7 @@ import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentMessage;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentStatusMessage;
 import com.shopstyle.ms_order.web.dto.kafka.PaymentDto;
 import com.shopstyle.ms_order.web.dto.kafka.SkusMessage;
+import com.shopstyle.ms_order.web.dto.mapper.OrderGetMapper;
 import com.shopstyle.ms_order.web.dto.mapper.OrderMapper;
 import com.shopstyle.ms_order.web.dto.kafka.SkuMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -53,7 +55,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderGetDto> getOrders(GetOrderQueryParam queryParams) {
-        return List.of();
+        LocalDateTime startDate = queryParams.getStartDate();
+        LocalDateTime endDate = queryParams.getEndDate() != null ? queryParams.getEndDate() : LocalDateTime.now();
+
+        List<Order> orderList;
+        if (queryParams.getStatus() == null) {
+            orderList = repository.findByDateBetween(startDate, endDate);
+        } else {
+            OrderStatus status = OrderStatus.valueOf(queryParams.getStatus());
+            orderList = repository.findByDateBetweenAndStatus(startDate, endDate, status);
+        }
+
+        return orderList.stream().map(OrderGetMapper::toOrderGetDto).collect(Collectors.toList());
     }
 
     @Override
