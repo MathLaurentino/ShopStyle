@@ -1,6 +1,6 @@
-package com.shopstyle.ms_order.servece.impl;
+package com.shopstyle.ms_order.kafka.impl;
 
-import com.shopstyle.ms_order.servece.OrderPaymentProducerService;
+import com.shopstyle.ms_order.kafka.OrderPaymentProducerService;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

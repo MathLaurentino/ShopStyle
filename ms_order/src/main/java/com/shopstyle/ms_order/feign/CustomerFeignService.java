@@ -1,4 +1,4 @@
-package com.shopstyle.ms_order.servece;
+package com.shopstyle.ms_order.feign;
 
 import com.shopstyle.ms_order.web.dto.feign.CustomerDtoFeign;
 import org.springframework.cloud.openfeign.FeignClient;

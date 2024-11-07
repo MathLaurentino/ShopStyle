@@ -3,6 +3,8 @@ package com.shopstyle.ms_order.servece.impl;
 import com.shopstyle.ms_order.entity.Order;
 import com.shopstyle.ms_order.entity.enums.OrderStatus;
 import com.shopstyle.ms_order.exception.EntityNotFoundException;
+import com.shopstyle.ms_order.kafka.CatalogSkusProducerService;
+import com.shopstyle.ms_order.kafka.OrderPaymentProducerService;
 import com.shopstyle.ms_order.repository.OrderRepository;
 import com.shopstyle.ms_order.servece.*;
 import com.shopstyle.ms_order.web.dto.OrderGetDto;
