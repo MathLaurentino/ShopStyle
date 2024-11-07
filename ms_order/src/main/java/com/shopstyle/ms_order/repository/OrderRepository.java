@@ -13,4 +13,12 @@ public interface OrderRepository extends MongoRepository<Order, String> {
 
     List<Order> findByDateBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, OrderStatus status);
 
+    List<Order> findByCustomerId(Long customerId);
+
+    List<Order> findByCustomerIdAndStatus(Long customerId, OrderStatus status);
+
+    List<Order> findByCustomerIdAndDateBetween(Long customerId, LocalDateTime startDate, LocalDateTime endDate);
+
+    List<Order> findByCustomerIdAndDateBetweenAndStatus(Long customerId, LocalDateTime startDate, LocalDateTime endDate, OrderStatus status);
+
 }

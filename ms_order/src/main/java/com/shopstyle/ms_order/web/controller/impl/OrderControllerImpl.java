@@ -37,8 +37,12 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public ResponseEntity<List<OrderGetDto>> getOrdersByCustomerId(GetOrderByCustomerIdQueryParam queryParam, Long customerId) {
-        return null;
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<OrderGetDto>> getOrdersByCustomerId(
+            @Valid @ModelAttribute GetOrderByCustomerIdQueryParam queryParams,
+            @PathVariable Long customerId) {
+        List<OrderGetDto> orderGetDto = service.getOrdersByCustomerId(queryParams, customerId);
+        return ResponseEntity.ok(orderGetDto);
     }
 
 }
