@@ -20,8 +20,8 @@ public class OrderMapper {
         return order;
     }
 
-    public static OrderGetDto toDto(Order order) {
-        return new ModelMapper().map(order, OrderGetDto.class);
+    public static CreatedOrderDto toDto(Order order) {
+        return new ModelMapper().map(order, CreatedOrderDto.class);
     }
 
     private static Customer customerDtoToCustomer(CustomerDto dto) {

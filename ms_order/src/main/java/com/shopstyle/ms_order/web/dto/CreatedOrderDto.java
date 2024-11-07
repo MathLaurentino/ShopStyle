@@ -8,18 +8,14 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderGetDto {
+public class CreatedOrderDto {
 
     private String id;
-    private CustomerDto customer;
-    private PaymentDto payment;
-    private List<CartItemDto> cart;
     private LocalDateTime date;
     private OrderStatus status;
     private BigDecimal total;

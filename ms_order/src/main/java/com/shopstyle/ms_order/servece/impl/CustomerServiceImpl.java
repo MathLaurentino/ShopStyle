@@ -4,7 +4,7 @@ import com.shopstyle.ms_order.exception.CustomerInactiveException;
 import com.shopstyle.ms_order.exception.EntityNotFoundException;
 import com.shopstyle.ms_order.exception.ErrorMicroServiceComunicationException;
 import com.shopstyle.ms_order.exception.InvalidAddressException;
-import com.shopstyle.ms_order.servece.CustomerFeignService;
+import com.shopstyle.ms_order.feign.CustomerFeignService;
 import com.shopstyle.ms_order.servece.CustomerService;
 import com.shopstyle.ms_order.web.dto.OrderReqDto;
 import com.shopstyle.ms_order.web.dto.feign.CustomerDtoFeign;
