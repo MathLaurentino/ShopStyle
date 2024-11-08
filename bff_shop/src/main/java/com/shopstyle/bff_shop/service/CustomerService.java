@@ -1,5 +1,6 @@
 package com.shopstyle.bff_shop.service;
 
+import com.shopstyle.bff_shop.jwt.JwtToken;
 import com.shopstyle.bff_shop.web.dto.ms_customer.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

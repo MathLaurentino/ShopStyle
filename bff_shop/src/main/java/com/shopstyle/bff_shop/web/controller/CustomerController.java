@@ -1,5 +1,6 @@
 package com.shopstyle.bff_shop.web.controller;
 
+import com.shopstyle.bff_shop.jwt.JwtToken;
 import com.shopstyle.bff_shop.service.CustomerService;
 import com.shopstyle.bff_shop.web.dto.ms_customer.*;
 import lombok.RequiredArgsConstructor;

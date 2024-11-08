@@ -1,4 +1,4 @@
-package com.shopstyle.bff_shop.web.dto.ms_customer;
+package com.shopstyle.bff_shop.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
