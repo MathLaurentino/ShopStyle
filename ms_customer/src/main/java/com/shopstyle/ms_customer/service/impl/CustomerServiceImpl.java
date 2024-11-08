@@ -12,6 +12,7 @@ import com.shopstyle.ms_customer.web.dto.CustomerPostDto;
 import com.shopstyle.ms_customer.web.dto.CustomerPutDto;
 import com.shopstyle.ms_customer.web.dto.mapper.CustomerMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public CustomerGetDto createCustomer(CustomerPostDto dto) {
@@ -33,6 +35,8 @@ public class CustomerServiceImpl implements CustomerService {
             throw new EmailAlreadyInUseException("Email already in use");
         });
 
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+
         return CustomerMapper.toDto(repository.save(customer));
     }
 
@@ -43,6 +47,15 @@ public class CustomerServiceImpl implements CustomerService {
         var customer = repository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Customer not found"));
         return CustomerMapper.toDto(customer);
+    }
+
+    @Override
+
+    @Transactional(readOnly = true)
+    public Customer getCustomerByEmail(String email) {
+        var customer = repository.findByEmail(email).orElseThrow(
+                () -> new EntityNotFoundException("Customer not found with email: " + email));
+        return customer;
     }
 
 
