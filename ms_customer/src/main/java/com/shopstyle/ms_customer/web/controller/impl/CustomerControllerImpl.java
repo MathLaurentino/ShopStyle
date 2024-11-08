@@ -1,5 +1,6 @@
 package com.shopstyle.ms_customer.web.controller.impl;
 
+import com.shopstyle.ms_customer.service.AuthenticationService;
 import com.shopstyle.ms_customer.service.CustomerService;
 import com.shopstyle.ms_customer.web.controller.CustomerController;
 import com.shopstyle.ms_customer.web.dto.CustomerGetDto;

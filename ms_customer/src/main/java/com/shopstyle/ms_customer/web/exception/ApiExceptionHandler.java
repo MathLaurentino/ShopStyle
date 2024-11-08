@@ -3,6 +3,7 @@ package com.shopstyle.ms_customer.web.exception;
 import com.shopstyle.ms_customer.exception.CpfAlreadyInUseException;
 import com.shopstyle.ms_customer.exception.EmailAlreadyInUseException;
 import com.shopstyle.ms_customer.exception.EntityNotFoundException;
+import com.shopstyle.ms_customer.exception.InvalidCredencialException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -19,6 +20,15 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
+    @ExceptionHandler(InvalidCredencialException.class)
+    public ResponseEntity<ErrorMessage> handleCredenciaisInvalidasException(InvalidCredencialException ex, HttpServletRequest request) {
+        String mensagemErro = "Credenciais inválidas para o usuário: " + ex.getUsername();
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.UNAUTHORIZED, mensagemErro));
+    }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorMessage> entidadeNaoEncontrada(RuntimeException ex, HttpServletRequest request) {
