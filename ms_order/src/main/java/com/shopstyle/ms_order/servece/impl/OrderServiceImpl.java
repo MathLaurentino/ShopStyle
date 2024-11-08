@@ -69,34 +69,6 @@ public class OrderServiceImpl implements OrderService {
         return orderList.stream().map(OrderGetMapper::toOrderGetDto).collect(Collectors.toList());
     }
 
-
-    public List<OrderGetDto> getOrdersByCustomerId2(GetOrderByCustomerIdQueryParam queryParams, Long customerId) {
-        LocalDateTime startDate = queryParams.getStartDate();
-        LocalDateTime endDate = queryParams.getEndDate();
-        OrderStatus orderStatus = queryParams.getStatus() != null ? OrderStatus.valueOf(queryParams.getStatus()) : null;
-
-        List<Order> orderList;
-        if (startDate == null && endDate == null && orderStatus == null) {
-            orderList = repository.findByCustomerId(customerId);
-        }
-        else if (startDate == null && endDate == null && orderStatus != null) {
-            orderList = repository.findByCustomerIdAndStatus(customerId, orderStatus);
-        }
-        else if (startDate != null || endDate != null) {
-            endDate = endDate == null ? LocalDateTime.now() : endDate;
-            startDate = startDate == null ? LocalDateTime.MIN : startDate;
-
-            orderList = (orderStatus == null)
-                    ? repository.findByCustomerIdAndDateBetween(customerId, startDate, endDate)
-                    : repository.findByCustomerIdAndDateBetweenAndStatus(customerId, startDate, endDate, orderStatus);
-        }
-        else {
-            orderList = repository.findByCustomerIdAndDateBetweenAndStatus(customerId, startDate, endDate, orderStatus);
-        }
-
-        return orderList.stream().map(OrderGetMapper::toOrderGetDto).collect(Collectors.toList());
-    }
-
     @Override
     public List<OrderGetDto> getOrdersByCustomerId(GetOrderByCustomerIdQueryParam queryParams, Long customerId) {
         LocalDateTime startDate = queryParams.getStartDate();
