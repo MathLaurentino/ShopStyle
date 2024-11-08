@@ -28,6 +28,7 @@ public class CustomerController {
         return service.updateCustomer(id, dto);
     }
 
+
     @PostMapping("/address")
     ResponseEntity<AddressGetDto> createAddress(@RequestBody AddressPostDto dto){
         return service.createAddress(dto);
@@ -43,4 +44,9 @@ public class CustomerController {
         return service.deleteAddress(id);
     }
 
+
+    @PostMapping("/login")
+    ResponseEntity<JwtToken> autenticar(@RequestBody CustomerLoginDto dto){
+        return service.autenticar(dto);
+    }
 }

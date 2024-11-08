@@ -19,6 +19,7 @@ public interface CustomerService {
 
 //    ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody String password);
 
+
     @PostMapping("/address")
     ResponseEntity<AddressGetDto> createAddress(@RequestBody AddressPostDto dto);
 
@@ -27,4 +28,8 @@ public interface CustomerService {
 
     @DeleteMapping("/address/{id}")
     ResponseEntity<Void> deleteAddress(@PathVariable Long id);
+
+
+    @PostMapping("/login")
+    ResponseEntity<JwtToken> autenticar(@RequestBody CustomerLoginDto dto);
 }
