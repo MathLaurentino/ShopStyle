@@ -1,6 +1,7 @@
 package com.shopstyle.bff_shop.web.controller;
 
 import com.shopstyle.bff_shop.service.CatalogService;
+import com.shopstyle.bff_shop.web.dto.ms_catalog.CategoryTreeDto;
 import com.shopstyle.bff_shop.web.dto.ms_catalog.ProductGetDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,4 +29,9 @@ public class CatalogController {
         return service.getProduct(id);
     }
 
+
+    @GetMapping("/categories")
+    ResponseEntity<List<CategoryTreeDto>> getProduct(){
+        return service.getAllCategoriesAsTree();
+    }
 }
