@@ -5,6 +5,7 @@ import com.shopstyle.ms_order.entity.Customer;
 import com.shopstyle.ms_order.entity.Order;
 import com.shopstyle.ms_order.entity.Payment;
 import com.shopstyle.ms_order.entity.enums.OrderStatus;
+import com.shopstyle.ms_order.exception.EntityNotFoundException;
 import com.shopstyle.ms_order.kafka.CatalogSkusProducerService;
 import com.shopstyle.ms_order.kafka.OrderPaymentProducerService;
 import com.shopstyle.ms_order.repository.OrderRepository;
@@ -13,6 +14,8 @@ import com.shopstyle.ms_order.servece.SkuService;
 import com.shopstyle.ms_order.servece.impl.OrderServiceImpl;
 import com.shopstyle.ms_order.web.dto.*;
 import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentMessage;
+import com.shopstyle.ms_order.web.dto.kafka.OrderPaymentStatusMessage;
+import com.shopstyle.ms_order.web.dto.kafka.SkusMessage;
 import com.shopstyle.ms_order.web.dto.mapper.OrderMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,9 +28,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -119,4 +122,181 @@ public class OrderServiceImplTest {
         verify(repository).findByDateBetweenAndStatus(queryParams.getStartDate(), queryParams.getEndDate(), OrderStatus.PROCESSING_PAYMENT);
     }
 
+    @Test
+    void testGetOrdersByCustomerIdWithDateRange() {
+        GetOrderByCustomerIdQueryParam queryParams = new GetOrderByCustomerIdQueryParam();
+        queryParams.setStartDate(LocalDateTime.of(2024, 1, 1, 0, 0));
+        queryParams.setEndDate(LocalDateTime.of(2024, 12, 31, 23, 59));
+
+        Long customerId = 1L;
+
+        Order order = new Order();
+        order.setId("67322e3e636c1b1649ba3b27");
+        order.setStatus(OrderStatus.PROCESSING_PAYMENT);
+        order.setDate(LocalDateTime.now());
+        order.setCustomer(new Customer(1L, 1L));
+        order.setPayment(new Payment(1L, 4));
+        order.setCart(List.of(new CartItem(1L, 2)));
+
+        when(repository.findByCustomerIdAndDateBetween(customerId, queryParams.getStartDate(), queryParams.getEndDate()))
+                .thenReturn(List.of(order));
+
+        List<OrderGetDto> orders = orderService.getOrdersByCustomerId(queryParams, customerId);
+
+        assertEquals(1, orders.size());
+        verify(repository).findByCustomerIdAndDateBetween(customerId, queryParams.getStartDate(), queryParams.getEndDate());
+    }
+
+    @Test
+    void testGetOrdersByCustomerIdWithStatus() {
+        GetOrderByCustomerIdQueryParam queryParams = new GetOrderByCustomerIdQueryParam();
+        queryParams.setStatus("PAYMENT_SUCCESSFUL");
+
+        Long customerId = 1L;
+
+        Order order = new Order();
+        order.setId("67322e3e636c1b1649ba3b27");
+        order.setStatus(OrderStatus.PAYMENT_SUCCESSFUL);
+        order.setDate(LocalDateTime.now());
+        order.setCustomer(new Customer(1L, 1L));
+        order.setPayment(new Payment(1L, 4));
+        order.setCart(List.of(new CartItem(1L, 2)));
+        when(repository.findByCustomerIdAndStatus(customerId, OrderStatus.PAYMENT_SUCCESSFUL))
+                .thenReturn(List.of(order));
+
+        List<OrderGetDto> orders = orderService.getOrdersByCustomerId(queryParams, customerId);
+
+        assertEquals(1, orders.size());
+        verify(repository).findByCustomerIdAndStatus(customerId, OrderStatus.PAYMENT_SUCCESSFUL);
+    }
+
+    @Test
+    void testGetOrdersByCustomerIdWithNoFilters() {
+        GetOrderByCustomerIdQueryParam queryParams = new GetOrderByCustomerIdQueryParam();
+
+        Long customerId = 1L;
+
+        Order order = new Order();
+        order.setId("67322e3e636c1b1649ba3b27");
+        order.setStatus(OrderStatus.PAYMENT_SUCCESSFUL);
+        order.setDate(LocalDateTime.now());
+        order.setCustomer(new Customer(1L, 1L));
+        order.setPayment(new Payment(1L, 4));
+        order.setCart(List.of(new CartItem(1L, 2)));
+
+        when(repository.findByCustomerId(customerId))
+                .thenReturn(List.of(order));
+
+        List<OrderGetDto> orders = orderService.getOrdersByCustomerId(queryParams, customerId);
+
+        assertEquals(1, orders.size());
+        verify(repository).findByCustomerId(customerId);
+    }
+
+    @Test
+    void testGetOrdersByCustomerIdWithDateRangeAndStatus() {
+        GetOrderByCustomerIdQueryParam queryParams = new GetOrderByCustomerIdQueryParam();
+        queryParams.setStartDate(LocalDateTime.of(2024, 1, 1, 0, 0));
+        queryParams.setEndDate(LocalDateTime.of(2024, 12, 31, 23, 59));
+        queryParams.setStatus("PAYMENT_SUCCESSFUL");
+
+        Long customerId = 1L;
+
+        Order order = new Order();
+        order.setId("67322e3e636c1b1649ba3b27");
+        order.setStatus(OrderStatus.PAYMENT_SUCCESSFUL);
+        order.setDate(LocalDateTime.now());
+        order.setCustomer(new Customer(1L, 1L));
+        order.setPayment(new Payment(1L, 4));
+        order.setCart(List.of(new CartItem(1L, 2)));
+
+        when(repository.findByCustomerIdAndDateBetweenAndStatus(customerId, queryParams.getStartDate(), queryParams.getEndDate(), OrderStatus.PAYMENT_SUCCESSFUL))
+                .thenReturn(List.of(order));
+
+        List<OrderGetDto> orders = orderService.getOrdersByCustomerId(queryParams, customerId);
+
+        assertEquals(1, orders.size());
+        verify(repository).findByCustomerIdAndDateBetweenAndStatus(customerId, queryParams.getStartDate(), queryParams.getEndDate(), OrderStatus.PAYMENT_SUCCESSFUL);
+    }
+
+    @Test
+    void testGetOrdersByCustomerIdWithDefaultDates() {
+        GetOrderByCustomerIdQueryParam queryParams = new GetOrderByCustomerIdQueryParam();
+        queryParams.setStartDate(null);
+        queryParams.setEndDate(null);
+
+        Long customerId = 1L;
+
+        Order order = new Order();
+        order.setId("67322e3e636c1b1649ba3b27");
+        order.setStatus(OrderStatus.PAYMENT_SUCCESSFUL);
+        order.setDate(LocalDateTime.now());
+        order.setCustomer(new Customer(1L, 1L));
+        order.setPayment(new Payment(1L, 4));
+        order.setCart(List.of(new CartItem(1L, 2)));
+
+        when(repository.findByCustomerId(customerId)).thenReturn(List.of(order));
+
+        List<OrderGetDto> orders = orderService.getOrdersByCustomerId(queryParams, customerId);
+
+        assertEquals(1, orders.size());
+        verify(repository).findByCustomerId(customerId);
+    }
+
+    @Test
+    void testUpdateOrderStatusSuccessfulPayment() {
+        OrderPaymentStatusMessage message = new OrderPaymentStatusMessage();
+        message.setOrderId("67322e3e636c1b1649ba3b27");
+        message.setStatus("PAYMENT_SUCCESSFUL");
+
+        Order order = new Order();
+        order.setId("67322e3e636c1b1649ba3b27");
+        order.setStatus(OrderStatus.PROCESSING_PAYMENT);
+        order.setDate(LocalDateTime.now());
+        order.setCustomer(new Customer(1L, 1L));
+        order.setPayment(new Payment(1L, 4));
+        order.setCart(List.of(new CartItem(1L, 2)));
+
+        when(repository.findById(message.getOrderId())).thenReturn(Optional.of(order));
+
+        orderService.updateOrderStatus(message);
+
+        verify(repository).save(order);
+        verify(catalogSkusProducerService).sendSkusMessage(any());
+    }
+
+    @Test
+    void testUpdateOrderStatusPaymentAmountNotAvailable() {
+        OrderPaymentStatusMessage message = new OrderPaymentStatusMessage();
+        message.setOrderId("67322e3e636c1b1649ba3b27");
+        message.setStatus("PAYMENT_AMOUNT_NOT_AVAILABLE");
+
+        Order order = new Order();
+        order.setId("67322e3e636c1b1649ba3b27");
+        order.setStatus(OrderStatus.PROCESSING_PAYMENT);
+        order.setDate(LocalDateTime.now());
+        order.setCustomer(new Customer(1L, 1L));
+        order.setPayment(new Payment(1L, 4));
+        order.setCart(List.of(new CartItem(1L, 2)));
+
+        when(repository.findById(message.getOrderId())).thenReturn(Optional.of(order));
+
+        orderService.updateOrderStatus(message);
+
+        verify(repository).save(order);
+        verify(catalogSkusProducerService, never()).sendSkusMessage(any());
+    }
+
+    @Test
+    void testUpdateOrderStatusOrderNotFound() {
+        OrderPaymentStatusMessage message = new OrderPaymentStatusMessage();
+        message.setOrderId("67322e3e636c1b1649ba3b27");
+        message.setStatus("PAYMENT_SUCCESSFUL");
+
+        when(repository.findById(message.getOrderId())).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            orderService.updateOrderStatus(message);
+        });
+    }
 }
