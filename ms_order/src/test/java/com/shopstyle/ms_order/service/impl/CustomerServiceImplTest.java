@@ -10,6 +10,9 @@ import com.shopstyle.ms_order.web.dto.CustomerDto;
 import com.shopstyle.ms_order.web.dto.OrderReqDto;
 import com.shopstyle.ms_order.web.dto.feign.AddressDtoFeign;
 import com.shopstyle.ms_order.web.dto.feign.CustomerDtoFeign;
+import feign.FeignException;
+import feign.Request;
+import feign.RequestTemplate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashMap;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -92,4 +96,43 @@ public class CustomerServiceImplTest {
         verify(customerFeignService).findCustomerById(dto.getCustomer().getId());
     }
 
+    @Test
+    void testCustomerDataIsValid_CustomerNotFound() {
+        OrderReqDto dto = new OrderReqDto();
+        dto.setCustomer(new CustomerDto(1L, 123L)); // IDs para cliente e endereço
+        dto.getCustomer().setAddressId(123L);
+
+        var request = Request.create(Request.HttpMethod.GET, "url",
+                new HashMap<>(), null, new RequestTemplate());
+        var exception = new FeignException.FeignClientException(
+                404, "Not Found", request, null, null
+        );
+
+        when(customerFeignService.findCustomerById(dto.getCustomer().getId())).thenThrow(exception);
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            customerService.customerDataIsValid(dto);
+        });
+        verify(customerFeignService).findCustomerById(dto.getCustomer().getId());
+    }
+
+    @Test
+    void testCustomerDataIsValid_MicroServiceError() {
+        OrderReqDto dto = new OrderReqDto();
+        dto.setCustomer(new CustomerDto(1L, 123L));
+        dto.getCustomer().setAddressId(123L);
+
+        var request = Request.create(Request.HttpMethod.GET, "url",
+                new HashMap<>(), null, new RequestTemplate());
+        var exception = new FeignException.FeignClientException(
+                500, "Internal Server Error", request, null, null
+        );
+
+        when(customerFeignService.findCustomerById(dto.getCustomer().getId())).thenThrow(exception);
+
+        assertThrows(ErrorMicroServiceComunicationException.class, () -> {
+            customerService.customerDataIsValid(dto);
+        });
+        verify(customerFeignService).findCustomerById(dto.getCustomer().getId());
+    }
 }
