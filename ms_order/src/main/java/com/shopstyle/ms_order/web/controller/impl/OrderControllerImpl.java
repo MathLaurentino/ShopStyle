@@ -41,6 +41,7 @@ public class OrderControllerImpl implements OrderController {
     public ResponseEntity<List<OrderGetDto>> getOrdersByCustomerId(
             @Valid @ModelAttribute GetOrderByCustomerIdQueryParam queryParams,
             @PathVariable Long customerId) {
+        System.out.println("oi");
         List<OrderGetDto> orderGetDto = service.getOrdersByCustomerId(queryParams, customerId);
         return ResponseEntity.ok(orderGetDto);
     }
