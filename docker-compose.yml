@@ -1,4 +1,5 @@
 services:
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     networks:
@@ -18,7 +19,7 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -34,7 +35,6 @@ services:
     environment:
       KAFKA_BROKERCONNECT: kafka:29092
 
-
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
@@ -48,8 +48,149 @@ services:
       KAFKA_CLUSTERS_0_NAME: "local"
       KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: "kafka:29092"  # Ajuste para a porta correta
 
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: senha
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db-docker:/docker-entrypoint-initdb.d
+    networks:
+      - broker-kafka
 
+  mongo-service1:
+    image: mongo:6.0
+    container_name: mongo_service1
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: msorder
+    volumes:
+      - mongo_service1_data:/data/db
+    networks:
+      - broker-kafka
+
+  mongo-service2:
+    image: mongo:6.0
+    container_name: mongo_service2
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_DATABASE: msaudit
+    volumes:
+      - mongo_service2_data:/data/db
+    networks:
+      - broker-kafka
+
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - broker-kafka
+
+  ms_customer:
+    build:
+      context: ./ms_customer
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+      - postgres
+    networks:
+      - broker-kafka
+
+  ms_payment:
+    build:
+      context: ./ms_payment
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+      - postgres
+      - kafka
+    networks:
+      - broker-kafka
+
+  ms_catalog:
+    build:
+      context: ./ms_catalog
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+      - postgres
+      - kafka
+    networks:
+      - broker-kafka
+
+  ms_order:
+    build:
+      context: ./ms_order
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    depends_on:
+      - eureka-server
+      - mongo-service1
+      - kafka
+    networks:
+      - broker-kafka
+
+  ms_audit:
+    build:
+      context: ./ms_audit
+      dockerfile: Dockerfile
+    ports:
+      - "8086:8086"
+    depends_on:
+      - eureka-server
+      - mongo-service2
+      - kafka
+    networks:
+      - broker-kafka
+
+  bff_shop:
+    build:
+      context: ./bff_shop
+      dockerfile: Dockerfile
+    ports:
+      - "8087:8087"
+    depends_on:
+      - eureka-server
+      - ms_customer
+      - ms_payment
+      - ms_catalog
+      - ms_order
+      - ms_audit
+    networks:
+      - broker-kafka
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    depends_on:
+      - bff_shop
+    networks:
+      - broker-kafka
 
 networks:
   broker-kafka:
     driver: bridge
+
+volumes:
+  postgres_data:
+  mongo_service1_data:
+  mongo_service2_data:
