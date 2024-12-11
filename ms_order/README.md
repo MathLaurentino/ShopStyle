@@ -25,7 +25,7 @@ O **MS Order** é responsável por gerenciar todos os pedidos de compra realizad
 ### Cria um novo pedido
 
 ```http
-    POST /v1/orders
+POST /v1/orders
 ```
 
 - **Payload:**
@@ -59,7 +59,7 @@ O **MS Order** é responsável por gerenciar todos os pedidos de compra realizad
 ### Retorna uma lista de pedidos com base nos filtros fornecidos 
 
 ```http
-    GET /v1/orders
+GET /v1/orders
 ```
 
 - **Query Params:**
@@ -70,7 +70,7 @@ O **MS Order** é responsável por gerenciar todos os pedidos de compra realizad
 ### Retorna uma lista de pedidos realizados por um cliente específico
 
 ```http
-    GET /v1/orders/customers/:customerId
+GET /v1/orders/customers/:customerId
 ```
 
 - **Path Params:**

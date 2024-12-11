@@ -53,14 +53,14 @@ Request Body:
 
 #### Listar Métodos de Pagamento
 ```http
-GET - `/v1/payments`
+GET /v1/payments
 ```
 Descrição: Retorna todos os métodos de pagamento cadastrado
 
 #### Atualizar Método de Pagamento
 
 ```http
-    PUT /v1/payments/:id
+PUT /v1/payments/:id
 ```
 
 Path Param:
@@ -93,7 +93,7 @@ Path Param:
 
 #### Criar Parcelamento
 ```http
-    POST - /v1/installments
+POST /v1/installments
 ```
 Request Body:
 ```json
@@ -110,7 +110,7 @@ Validações:
 #### Atualizar Parcelamento
 
 ```http
-    PUT - /v1/installments/:id
+PUT /v1/installments/:id
 ```
 
 Path Param:
@@ -127,7 +127,7 @@ Request Body:
 ### Excluir Parcelamento
 
 ```http
-    DELETE - /v1/installments/:id
+DELETE /v1/installments/:id
 ```
 
 Path Param:
