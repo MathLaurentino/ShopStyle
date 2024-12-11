@@ -1,0 +1,3 @@
+CREATE DATABASE mscustomer;
+CREATE DATABASE mspayment;
+CREATE DATABASE mscatalog;

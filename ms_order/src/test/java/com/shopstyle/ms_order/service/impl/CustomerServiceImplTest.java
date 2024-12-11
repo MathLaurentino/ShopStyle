@@ -1,0 +1,138 @@
+package com.shopstyle.ms_order.service.impl;
+
+import com.shopstyle.ms_order.exception.CustomerInactiveException;
+import com.shopstyle.ms_order.exception.EntityNotFoundException;
+import com.shopstyle.ms_order.exception.ErrorMicroServiceComunicationException;
+import com.shopstyle.ms_order.exception.InvalidAddressException;
+import com.shopstyle.ms_order.feign.CustomerFeignService;
+import com.shopstyle.ms_order.servece.impl.CustomerServiceImpl;
+import com.shopstyle.ms_order.web.dto.CustomerDto;
+import com.shopstyle.ms_order.web.dto.OrderReqDto;
+import com.shopstyle.ms_order.web.dto.feign.AddressDtoFeign;
+import com.shopstyle.ms_order.web.dto.feign.CustomerDtoFeign;
+import feign.FeignException;
+import feign.Request;
+import feign.RequestTemplate;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
+
+import java.util.HashMap;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class CustomerServiceImplTest {
+
+    @Mock
+    private CustomerFeignService customerFeignService;
+
+    @InjectMocks
+    private CustomerServiceImpl customerService;
+
+    @Test
+    void testCustomerDataIsValid_Success() {
+        OrderReqDto dto = new OrderReqDto();
+        dto.setCustomer(new CustomerDto(1L, 123L));
+        dto.getCustomer().setAddressId(123L);
+
+        CustomerDtoFeign customerDto = new CustomerDtoFeign();
+        customerDto.setActive(true);
+        AddressDtoFeign address = new AddressDtoFeign();
+        address.setId(123L);
+        customerDto.setAddresses(Set.of(address));
+
+        when(customerFeignService.findCustomerById(dto.getCustomer().getId())).thenReturn(ResponseEntity.ok(customerDto));
+
+        Boolean result = customerService.customerDataIsValid(dto);
+        assertTrue(result);
+        verify(customerFeignService).findCustomerById(dto.getCustomer().getId());
+    }
+
+    @Test
+    void testCustomerDataIsValid_CustomerInactive() {
+        OrderReqDto dto = new OrderReqDto();
+        dto.setCustomer(new CustomerDto(1L, 123L));
+        dto.getCustomer().setAddressId(123L);
+
+        CustomerDtoFeign customerDto = new CustomerDtoFeign();
+        customerDto.setActive(false);
+        AddressDtoFeign address = new AddressDtoFeign();
+        address.setId(123L);
+        customerDto.setAddresses(Set.of(address));
+
+        when(customerFeignService.findCustomerById(dto.getCustomer().getId())).thenReturn(ResponseEntity.ok(customerDto));
+
+        assertThrows(CustomerInactiveException.class, () -> {
+            customerService.customerDataIsValid(dto);
+        });
+        verify(customerFeignService).findCustomerById(dto.getCustomer().getId());
+    }
+
+    @Test
+    void testCustomerDataIsValid_InvalidAddress() {
+        OrderReqDto dto = new OrderReqDto();
+        dto.setCustomer(new CustomerDto(1L, 123L));
+        dto.getCustomer().setAddressId(999L);
+
+        CustomerDtoFeign customerDto = new CustomerDtoFeign();
+        customerDto.setActive(true);
+        AddressDtoFeign address = new AddressDtoFeign();
+        address.setId(123L);
+        customerDto.setAddresses(Set.of(address));
+
+        when(customerFeignService.findCustomerById(dto.getCustomer().getId())).thenReturn(ResponseEntity.ok(customerDto));
+
+        assertThrows(InvalidAddressException.class, () -> {
+            customerService.customerDataIsValid(dto);
+        });
+        verify(customerFeignService).findCustomerById(dto.getCustomer().getId());
+    }
+
+    @Test
+    void testCustomerDataIsValid_CustomerNotFound() {
+        OrderReqDto dto = new OrderReqDto();
+        dto.setCustomer(new CustomerDto(1L, 123L)); // IDs para cliente e endereço
+        dto.getCustomer().setAddressId(123L);
+
+        var request = Request.create(Request.HttpMethod.GET, "url",
+                new HashMap<>(), null, new RequestTemplate());
+        var exception = new FeignException.FeignClientException(
+                404, "Not Found", request, null, null
+        );
+
+        when(customerFeignService.findCustomerById(dto.getCustomer().getId())).thenThrow(exception);
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            customerService.customerDataIsValid(dto);
+        });
+        verify(customerFeignService).findCustomerById(dto.getCustomer().getId());
+    }
+
+    @Test
+    void testCustomerDataIsValid_MicroServiceError() {
+        OrderReqDto dto = new OrderReqDto();
+        dto.setCustomer(new CustomerDto(1L, 123L));
+        dto.getCustomer().setAddressId(123L);
+
+        var request = Request.create(Request.HttpMethod.GET, "url",
+                new HashMap<>(), null, new RequestTemplate());
+        var exception = new FeignException.FeignClientException(
+                500, "Internal Server Error", request, null, null
+        );
+
+        when(customerFeignService.findCustomerById(dto.getCustomer().getId())).thenThrow(exception);
+
+        assertThrows(ErrorMicroServiceComunicationException.class, () -> {
+            customerService.customerDataIsValid(dto);
+        });
+        verify(customerFeignService).findCustomerById(dto.getCustomer().getId());
+    }
+}
