@@ -15,6 +15,8 @@ A aplicação é composta por **6 micro-serviços** principais:
 
 Cada micro-serviço foi projetado para ser autônomo, possuindo suas próprias bases de dados, validações e integrações.
 
+![img](https://github.com/user-attachments/assets/8ceb7340-cc4c-4d29-a4b8-a7ea2c26c5e8)
+
 ## Tecnologias Usadas
 
 O projeto utiliza as seguintes tecnologias e ferramentas:
