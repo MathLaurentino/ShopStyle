@@ -14,8 +14,8 @@ O MS BFF-Shop atua como a camada de interface entre os clientes e os micro-servi
 ### Autenticação e Cadastro
 
 #### Autentica de cliente
-``` 
-    POST /v1/login
+```http
+POST /v1/login
 ```
 - **Request Body:**
 ```json
@@ -28,8 +28,8 @@ O MS BFF-Shop atua como a camada de interface entre os clientes e os micro-servi
 
 #### Cadastra de cliente
 
-```
-    POST /v1/customers
+```http
+POST /v1/customers
 ```
 - **Request Body:**
 ```json
@@ -54,8 +54,8 @@ O MS BFF-Shop atua como a camada de interface entre os clientes e os micro-servi
 
 #### Retorna os dados de um cliente
 
-```
-    GET /v1/customers/:id
+```http
+GET /v1/customers/:id
 ```
 - **Response:**
 ```json
@@ -78,8 +78,8 @@ O MS BFF-Shop atua como a camada de interface entre os clientes e os micro-servi
 
 #### Atualiza os dados de um cliente
 
-```
-    PUT /v1/customers/:id
+```http
+PUT /v1/customers/:id
 ```
 
 - **Request Body:** 
@@ -87,7 +87,7 @@ O MS BFF-Shop atua como a camada de interface entre os clientes e os micro-servi
 
 #### Atualiza a senha (AINDA NÃO IMPLEMENTADO)
 
-```
+```http
 PUT /v1/customers/:id/password
 ```
 
@@ -102,8 +102,8 @@ PUT /v1/customers/:id/password
 
 #### Cadastra Endereço
 
-```
-    POST /v1/address
+```http
+POST /v1/address
 ```
 
 - **Request Body:**
@@ -126,8 +126,8 @@ PUT /v1/customers/:id/password
 
 #### Atualiza Endereço
 
-```
-    PUT /v1/address/:id
+```http
+PUT /v1/address/:id
 ```
 - Path Params 
   - id: id do endereço (address)
@@ -135,40 +135,39 @@ PUT /v1/customers/:id/password
   - Campos a serem atualizados.
 
 #### Remove um endereço
-```
-    DELETE /v1/address/:id
+```http
+DELETE /v1/address/:id
 ```
 
 ### Produtos e Categorias
 
 
 #### Lista todos os produtos
-```
-    GET - /v1/products
+```http
+GET /v1/products
 ```
 
 #### Retorna os detalhes de um produto
-```
-    GET - /v1/products/:id
+```http
+GET /v1/products/:id
 ```
 
 
 #### Lista todas as categorias no formato de árvore hierárquica
-```
-    GET - /v1/categories
+```http
+GET /v1/categories
 ```
 
 #### Retorna os produtos de uma categoria específica (AINDA NÃO IMPLEMENTADO)
-```
-    GET - /v1/categories/:id/products
+```http
+GET /v1/categories/:id/products
 ```
 
 ### Pedidos
 
 ### Cria um novo pedido
-
-```
-    POST /v1/orders
+```http
+POST /v1/orders
 ```
 
 - **Payload:**
@@ -200,9 +199,8 @@ PUT /v1/customers/:id/password
     - Envia mensagem ao MS Payment via Kafka para processar o pagamento.
 
 ### Retorna uma lista de pedidos realizados por um cliente específico
-
-```
-    GET /v1/orders/customers/:customerId
+```http
+GET /v1/orders/customers/:customerId
 ```
 
 - **Path Params:**

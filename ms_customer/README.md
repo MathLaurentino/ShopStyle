@@ -31,23 +31,30 @@ O microserviço **Customer** é responsável por gerenciar os dados dos usuário
 
 ### Autenticação
 
-#### **POST /v1/login**
-Autentica o usuário.
+#### Autentica o usuário
+
+```http
+POST /v1/login
+```
+
 - **Request Body:**
-  ```json
+```json
   {
     "email": "maria@email.com",
     "password": "12345678"
   }
-  ```
+```
 - **Response:** Token JWT para autenticação.
 
 ### Gerenciamento de Clientes
 
-#### **POST /v1/customers**
-Cadastra um novo cliente.
+#### Cadastra um novo cliente
+
+```http
+POST /v1/customers
+```
 - **Request Body:**
-  ```json
+```json
   {
     "firstName": "Maria",
     "lastName": "Oliveira",
@@ -58,17 +65,24 @@ Cadastra um novo cliente.
     "password": "12345678",
     "active": true
   }
-  ```
+```
 - **Validações:**
     - Campos obrigatórios.
     - Email único.
     - CPF no formato correto.
     - Senha com no mínimo 6 caracteres.
 
-#### **GET /v1/customers/:id**
-Retorna os dados de um cliente específico, incluindo seus endereços.
+#### Retorna os dados de um cliente 
+
+```http
+GET /v1/customers/:id
+```
+
+- **Path Params**
+  - id: id do cliente
+
 - **Response:**
-  ```json
+```json
   {
     "id": 1,
     "firstName": "Maria",
@@ -84,14 +98,24 @@ Retorna os dados de um cliente específico, incluindo seus endereços.
       }
     ]
   }
-  ```
+```
 
-#### **PUT /v1/customers/:id**
-Atualiza os dados de um cliente.
-- **Request Body:** Campos a serem atualizados.
+#### Atualiza os dados de um cliente
 
-#### **PUT /v1/customers/:id/password**
-Atualiza a senha do cliente (ainda não implementado).
+```http
+PUT /v1/customers/:id
+```
+- **Path Params**
+  - id: id do cliente
+- **Request Body:** 
+  - Campos a serem atualizados.
+
+#### Atualiza a senha do cliente (ainda não implementado).
+
+```http
+PUT /v1/customers/:id/password
+```
+
 - **Request Body:**
   ```json
   {
@@ -101,8 +125,12 @@ Atualiza a senha do cliente (ainda não implementado).
 
 ### Gerenciamento de Endereços
 
-#### **POST /v1/address**
-Cadastra um novo endereço para um cliente.
+#### Cadastra um novo endereço para um cliente
+
+```http
+POST /v1/address
+```
+
 - **Request Body:**
   ```json
   {
@@ -120,9 +148,20 @@ Cadastra um novo endereço para um cliente.
     - Estado válido.
     - Campos obrigatórios, exceto `complement`.
 
-#### **PUT /v1/address/:id**
-Atualiza um endereço existente.
-- **Request Body:** Campos a serem atualizados.
+#### Atualiza um endereço existente
 
-#### **DELETE /v1/address/:id**
-Remove um endereço.
+```http
+PUT /v1/address/:id
+```
+- **Path Params**
+  - id: id do endereço (address)
+- **Request Body:** 
+  - Campos a serem atualizados.
+
+#### Remove um endereço
+
+```http
+DELETE /v1/address/:id
+```
+- **Path Params**
+  - id: id do endereço (address)
